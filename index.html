@@ -690,45 +690,6 @@
     50%      { height: 100%; }
   }
 
-  .kfs-btn {
-    position: absolute; top: 18px; right: 18px;
-    z-index: 4;
-    width: 38px; height: 38px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid var(--line);
-    color: var(--text);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s;
-  }
-  .kfs-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .kfs-btn svg { width: 16px; height: 16px; }
-
-  /* Fullscreen mode */
-  .kstage:fullscreen,
-  .kstage.is-fs {
-    border-radius: 0;
-    min-height: 100vh;
-    width: 100vw; height: 100vh;
-  }
-  .kstage:fullscreen .kstage-body,
-  .kstage.is-fs .kstage-body {
-    padding: 60px;
-  }
-  .kstage:fullscreen .kline.k-cur,
-  .kstage.is-fs .kline.k-cur {
-    font-size: clamp(48px, 9vw, 130px);
-  }
-  .kstage:fullscreen .kline.k-p1,
-  .kstage:fullscreen .kline.k-n1,
-  .kstage.is-fs .kline.k-p1,
-  .kstage.is-fs .kline.k-n1 { font-size: 40px; }
-  .kstage:fullscreen .kline.k-p2,
-  .kstage:fullscreen .kline.k-n2,
-  .kstage.is-fs .kline.k-p2,
-  .kstage.is-fs .kline.k-n2 { font-size: 28px; }
-
   /* ===== Footer ===== */
   footer {
     position: relative; z-index: 2;
@@ -838,8 +799,6 @@
     .kw.singing::after { bottom: -4px; height: 2px; }
     .kstage-eq { padding: 8px 0 14px; height: 22px; }
     .kstage-eq .b:nth-child(n+19) { display: none; }
-    .kfs-btn { width: 32px; height: 32px; top: 12px; right: 12px; }
-    .kfs-btn svg { width: 14px; height: 14px; }
 
     /* lyrics */
     .lyrics { padding: 24px 16px; }
@@ -932,10 +891,6 @@
   </div>
 
   <div class="kstage" id="kstage">
-    <button class="kfs-btn" id="kfsBtn" title="フルスクリーン">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-    </button>
-
     <div class="kstage-meta">
       <span><span class="rec-dot"></span>LIVE</span>
       <span>SATU VISI · <span class="lit">ZEVA</span></span>
@@ -1348,8 +1303,8 @@
     }
   }
 
-  // Line advances 0.1s after the first word (data is -0.2; -0.3 offset = -0.1 total lead)
-  const LINE_LEAD = -0.3;
+  // Line advances exactly at the first word (data is -0.2; cancel with -0.2 = 0 total lead)
+  const LINE_LEAD = -0.2;
   function getKIdx(t) {
     const lookupT = t + LINE_LEAD;
     let idx = -1;
@@ -1383,16 +1338,6 @@
   }
   requestAnimationFrame(kTick);
 
-  // Fullscreen toggle
-  document.getElementById('kfsBtn').addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      if (kstage.requestFullscreen) kstage.requestFullscreen();
-      else kstage.classList.add('is-fs');
-    } else {
-      if (document.exitFullscreen) document.exitFullscreen();
-      else kstage.classList.remove('is-fs');
-    }
-  });
 
   // Side nav active state
   const sideLinks = document.querySelectorAll('.lyrics-side a');
