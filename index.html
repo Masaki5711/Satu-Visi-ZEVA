@@ -877,8 +877,8 @@
 <header class="topbar" id="topbar">
   <div class="brand"><span class="dot"></span>ZEVA / YMMA</div>
   <nav class="nav">
-    <a href="#listen">Listen</a>
     <a href="#karaoke">Karaoke</a>
+    <a href="#listen">Listen</a>
     <a href="#lyrics">Lyrics</a>
     <a href="#download">Download</a>
   </nav>
@@ -924,10 +924,48 @@
   </div>
 </section>
 
+<!-- ===== KARAOKE ===== -->
+<section class="karaoke-section" id="karaoke">
+  <div class="section-head">
+    <h2 class="section-title"><span class="num">01 /</span>KARAOKE</h2>
+    <span class="section-sub">Live Captions · Sing Along</span>
+  </div>
+
+  <div class="kstage" id="kstage">
+    <button class="kfs-btn" id="kfsBtn" title="フルスクリーン">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+
+    <div class="kstage-meta">
+      <span><span class="rec-dot"></span>LIVE</span>
+      <span>SATU VISI · <span class="lit">ZEVA</span></span>
+      <span>LINE <span class="lit" id="kCounter">0</span> / <span id="kCounterTotal">0</span></span>
+    </div>
+
+    <div class="kstage-body idle" id="kbody">
+      <div class="kline k-p2" id="kP2">—</div>
+      <div class="kline k-p1" id="kP1">—</div>
+      <div class="kline k-cur" id="kCur">▶ Tekan PLAY untuk mulai</div>
+      <div class="kline k-n1" id="kN1">—</div>
+      <div class="kline k-n2" id="kN2">—</div>
+    </div>
+
+    <div class="kstage-eq">
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== PLAYER ===== -->
 <section class="player-section" id="listen">
   <div class="section-head">
-    <h2 class="section-title"><span class="num">01 /</span>LISTEN</h2>
+    <h2 class="section-title"><span class="num">02 /</span>LISTEN</h2>
     <span class="section-sub">Streaming · High Quality</span>
   </div>
 
@@ -977,44 +1015,6 @@
     </div>
 
     <audio id="audio" preload="metadata"></audio>
-  </div>
-</section>
-
-<!-- ===== KARAOKE ===== -->
-<section class="karaoke-section" id="karaoke">
-  <div class="section-head">
-    <h2 class="section-title"><span class="num">02 /</span>KARAOKE</h2>
-    <span class="section-sub">Live Captions · Sing Along</span>
-  </div>
-
-  <div class="kstage" id="kstage">
-    <button class="kfs-btn" id="kfsBtn" title="フルスクリーン">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-    </button>
-
-    <div class="kstage-meta">
-      <span><span class="rec-dot"></span>LIVE</span>
-      <span>SATU VISI · <span class="lit">ZEVA</span></span>
-      <span>LINE <span class="lit" id="kCounter">0</span> / <span id="kCounterTotal">0</span></span>
-    </div>
-
-    <div class="kstage-body idle" id="kbody">
-      <div class="kline k-p2" id="kP2">—</div>
-      <div class="kline k-p1" id="kP1">—</div>
-      <div class="kline k-cur" id="kCur">▶ 再生してください</div>
-      <div class="kline k-n1" id="kN1">—</div>
-      <div class="kline k-n2" id="kN2">—</div>
-    </div>
-
-    <div class="kstage-eq">
-      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
-      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
-      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
-      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
-      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
-      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
-      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
-    </div>
   </div>
 </section>
 
@@ -1296,7 +1296,9 @@
     wordSpans = [];
 
     if (idx < 0 || idx >= klines.length) {
-      kCur.textContent = '▶ 再生してください';
+      // Idle: show the prompt only when paused; hide it (just a non-breaking space)
+      // while the audio is playing so the user doesn't see the prompt mid-song.
+      kCur.textContent = audio.paused ? '▶ Tekan PLAY untuk mulai' : ' ';
       kbody.classList.add('idle');
       kbody.classList.remove('solo');
       return;
@@ -1359,7 +1361,8 @@
 
   function kTick() {
     const t = audio.currentTime;
-    kbody.classList.toggle('live', !audio.paused);
+    const playing = !audio.paused;
+    kbody.classList.toggle('live', playing);
 
     const idx = getKIdx(t);
     if (idx !== curLineIdx) {
@@ -1369,6 +1372,10 @@
       setSideLine(kN1, idx + 1);
       setSideLine(kN2, idx + 2);
       kCounter.textContent = Math.max(0, idx + 1);
+    } else if (idx < 0 || idx >= klines.length) {
+      // While idle (no active line), sync the message with play state
+      const desired = playing ? ' ' : '▶ Tekan PLAY untuk mulai';
+      if (kCur.textContent !== desired) kCur.textContent = desired;
     }
     updateWordStates(t);
 
