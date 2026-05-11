@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZEVA · Word Sync Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #07080b;
+    --panel: #11141b;
+    --panel-2: #161a23;
+    --line: rgba(255,255,255,0.08);
+    --text: #e8eaf0;
+    --muted: #7a8090;
+    --accent: #ff2d3a;
+    --accent-2: #ff6b2c;
+    --green: #2ecc71;
+    --gold: #f5c542;
+  }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    height: 100%;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .bg-glow {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(900px 600px at 20% 0%, rgba(255,45,58,0.12), transparent 60%),
+      radial-gradient(700px 500px at 90% 100%, rgba(255,107,44,0.08), transparent 60%);
+  }
+  .app {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    height: 100vh;
+  }
+
+  /* ===== Header ===== */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+  }
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 0.18em;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand .dot { width: 9px; height: 9px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 14px var(--accent); }
+  .brand small {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.3em;
+    color: var(--muted); margin-left: 6px;
+  }
+  a.back {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none; padding: 8px 14px;
+    border: 1px solid var(--line); border-radius: 3px;
+    transition: all .2s;
+  }
+  a.back:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ===== Audio bar ===== */
+  .audio-bar {
+    display: flex; align-items: center; gap: 18px;
+    padding: 14px 28px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+  }
+  .play {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border: none; color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 20px rgba(255,45,58,0.35);
+    flex-shrink: 0;
+  }
+  .play:hover { transform: scale(1.05); }
+  .play svg { width: 18px; height: 18px; }
+  .seek { flex: 1; min-width: 0; }
+  .seek-bar {
+    height: 6px; background: rgba(255,255,255,0.08); border-radius: 999px;
+    position: relative; cursor: pointer; overflow: hidden;
+  }
+  .seek-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    width: 0%; border-radius: 999px;
+  }
+  .seek-times {
+    display: flex; justify-content: space-between;
+    margin-top: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--muted); letter-spacing: 0.1em;
+  }
+  .seek-times .cur { color: var(--accent); }
+  .audio-actions { display: flex; gap: 6px; }
+  .ab {
+    padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+    border-radius: 3px; color: var(--text); cursor: pointer;
+  }
+  .ab:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== Main ===== */
+  main {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 0;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ===== Tap zone ===== */
+  .tapzone {
+    display: flex; flex-direction: column;
+    padding: 20px 36px;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .stat-row {
+    display: flex; gap: 22px; align-items: center;
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .stat-row .lit { color: var(--accent); }
+  .stat-row .good { color: var(--green); }
+  .stat-row .group { display: flex; gap: 8px; align-items: center; }
+  .stat-row label {
+    display: flex; gap: 8px; align-items: center;
+    font-size: 10px;
+  }
+  .stat-row input[type=range] {
+    width: 110px;
+    accent-color: var(--accent);
+  }
+
+  .lines-frame {
+    flex: 1;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 18px 0 8px;
+    overflow: hidden;
+    min-height: 0;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+  }
+
+  .ln {
+    margin: 8px 0;
+    transition: all .35s cubic-bezier(.4,0,.2,1);
+    line-height: 1.3;
+    text-align: center;
+  }
+  .ln.prev { font-size: 16px; color: rgba(255,255,255,0.22); }
+  .ln.next { font-size: 18px; color: rgba(255,255,255,0.28); }
+  .ln.next2 { font-size: 14px; color: rgba(255,255,255,0.14); }
+  .ln.cur {
+    font-size: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, rgba(255,45,58,0.10), rgba(255,107,44,0.04));
+    border: 1px solid rgba(255,45,58,0.25);
+    border-radius: 8px;
+    position: relative;
+  }
+  .ln.cur::before {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent-2));
+    border-radius: 8px 0 0 8px;
+  }
+  .ln.cur.solo {
+    background: linear-gradient(135deg, rgba(245,197,66,0.15), rgba(255,107,44,0.05));
+    border-color: rgba(245,197,66,0.3);
+  }
+  .ln.cur.solo::before {
+    background: linear-gradient(to bottom, var(--gold), var(--accent-2));
+  }
+
+  /* Word states inside current line */
+  .cw {
+    display: inline-block;
+    margin: 0 6px;
+    transition: all .2s;
+    position: relative;
+  }
+  .cw.done { color: rgba(255,255,255,0.45); }
+  .cw.active {
+    color: #fff;
+    font-size: 1.5em;
+    text-shadow:
+      0 0 30px rgba(255,45,58,0.9),
+      0 0 60px rgba(255,107,44,0.5);
+    background: linear-gradient(95deg, #fff 0%, #ffd9b3 40%, var(--accent-2) 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: cw-pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes cw-pulse {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .cw.pending { color: rgba(255,255,255,0.32); }
+  /* "Next-to-tap" word: look identical to pending so no word feels emphasized
+     before the first tap. The active (just-tapped) word is the only big one. */
+  .cw.next { color: rgba(255,255,255,0.32); }
+
+  /* Solo single-token */
+  .cw.solo-token {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 0.7em !important;
+    letter-spacing: 0.4em;
+    color: var(--gold) !important;
+    text-transform: uppercase;
+  }
+  .cw.solo-token.active {
+    -webkit-text-fill-color: var(--gold);
+    text-shadow: 0 0 30px rgba(245,197,66,0.7);
+    background: none;
+  }
+
+  .ln.prev .cw, .ln.next .cw, .ln.next2 .cw {
+    margin: 0 4px;
+  }
+
+  /* ===== Tap controls ===== */
+  .tap-area {
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 0 4px;
+  }
+  .tap-btn {
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border: none; color: #fff; cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px; letter-spacing: 0.05em;
+    box-shadow: 0 15px 50px rgba(255,45,58,0.4), inset 0 0 0 4px rgba(255,255,255,0.1);
+    transition: transform .08s, box-shadow .08s;
+    position: relative;
+  }
+  .tap-btn:hover { transform: scale(1.03); }
+  .tap-btn:active, .tap-btn.flash {
+    transform: scale(0.9);
+    box-shadow: 0 6px 20px rgba(255,45,58,0.3), inset 0 0 0 4px rgba(255,255,255,0.4), 0 0 80px rgba(255,45,58,0.7);
+  }
+  .tap-btn::after {
+    content: 'SPACE';
+    position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.4em;
+    color: var(--muted); white-space: nowrap;
+  }
+  .controls-row {
+    display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+    margin-top: 16px;
+  }
+  .ctl {
+    padding: 9px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+    border-radius: 3px; color: var(--text); cursor: pointer;
+  }
+  .ctl:hover { border-color: var(--accent); color: var(--accent); }
+  .ctl kbd {
+    background: rgba(255,255,255,0.08); padding: 1px 6px;
+    border-radius: 2px; font-size: 9px; margin-left: 6px;
+    color: var(--muted);
+  }
+  .ctl.danger:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== List (right) ===== */
+  .list {
+    background: var(--panel);
+    border-left: 1px solid var(--line);
+    overflow-y: auto;
+    padding: 0 0 20px;
+    min-height: 0;
+  }
+  .list-head {
+    position: sticky; top: 0;
+    padding: 18px 22px 14px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 1;
+  }
+  .list-head h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 0.05em;
+  }
+  .list-head .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.15em;
+  }
+  .li {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background .15s;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .li:hover { background: rgba(255,255,255,0.03); }
+  .li.cur-li {
+    background: rgba(255,45,58,0.1);
+    border-left-color: var(--accent);
+  }
+  .li.solo-li {
+    background: rgba(245,197,66,0.06);
+    border-left-color: var(--gold);
+  }
+  .li-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .li-head .lt { color: var(--green); }
+  .li-head .lt.empty { color: var(--muted); }
+  .li-head .prg {
+    font-size: 10px;
+    background: rgba(255,255,255,0.06);
+    padding: 1px 6px; border-radius: 2px;
+  }
+  .li-text {
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+  }
+  .li.solo-li .li-text {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+  .li.recorded .li-head .lt { color: var(--green); }
+  .li-bar {
+    margin-top: 5px;
+    height: 3px; background: rgba(255,255,255,0.05);
+    border-radius: 99px; overflow: hidden;
+  }
+  .li-bar > div {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transition: width .25s;
+  }
+  .li.solo-li .li-bar { display: none; }
+
+  /* ===== Output ===== */
+  .output {
+    background: var(--panel-2);
+    border-top: 1px solid var(--line);
+    padding: 14px 28px 18px;
+    max-height: 280px;
+    display: flex; flex-direction: column;
+    min-height: 0;
+  }
+  .output-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .output-head h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 0.05em;
+  }
+  .output-right { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .out-tabs { display: flex; gap: 4px; }
+  .out-tab {
+    padding: 6px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    background: transparent; border: 1px solid var(--line);
+    border-radius: 3px; color: var(--muted); cursor: pointer;
+  }
+  .out-tab.active { background: linear-gradient(95deg, var(--accent), var(--accent-2)); color: #fff; border-color: transparent; }
+  .out-text {
+    flex: 1; min-height: 0;
+    background: #06070a;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--text);
+    overflow-y: auto;
+    white-space: pre;
+    resize: none;
+    width: 100%;
+  }
+
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; }
+    .list { border-left: none; border-top: 1px solid var(--line); max-height: 240px; }
+    .tap-btn { width: 110px; height: 110px; font-size: 30px; }
+    .ln.cur { font-size: 22px; padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<div class="app">
+
+<header>
+  <div class="brand">
+    <span class="dot"></span>
+    ZEVA SYNC <small>WORD TIMING TOOL</small>
+  </div>
+  <a class="back" href="index.html">← Site</a>
+</header>
+
+<div class="audio-bar">
+  <button class="play" id="playBtn"><svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+  <div class="seek">
+    <div class="seek-bar" id="seekBar"><div class="seek-fill" id="seekFill"></div></div>
+    <div class="seek-times"><span class="cur" id="curTime">0:00</span><span id="durTime">0:00</span></div>
+  </div>
+  <div class="audio-actions">
+    <button class="ab" data-skip="-5">−5s</button>
+    <button class="ab" data-skip="-2">−2s</button>
+    <button class="ab" data-skip="2">+2s</button>
+    <button class="ab" data-skip="5">+5s</button>
+  </div>
+  <audio id="audio" src="Satu Visi ZEVA (Full).mp3" preload="metadata"></audio>
+</div>
+
+<main>
+  <div class="tapzone">
+    <div class="stat-row">
+      <span class="group">WORD <span class="lit" id="statWord">0</span> / <span id="statWordTotal">0</span></span>
+      <span class="group">LINE <span class="lit" id="statLine">0</span> / <span id="statLineTotal">0</span></span>
+      <span class="group good" id="statRec">記録: 0</span>
+      <label>
+        反応補正
+        <input type="range" id="reactSlider" min="0" max="400" step="10" value="150">
+        <span class="lit" id="reactVal">150</span>ms
+      </label>
+    </div>
+
+    <div class="lines-frame" id="linesFrame">
+      <div class="ln prev" id="lnPrev">—</div>
+      <div class="ln cur" id="lnCur"><span class="cw active">▶ 再生してください</span></div>
+      <div class="ln next" id="lnNext">—</div>
+      <div class="ln next2" id="lnNext2">—</div>
+    </div>
+
+    <div class="tap-area">
+      <button class="tap-btn" id="tapBtn">TAP</button>
+      <div class="controls-row">
+        <button class="ctl" id="undoBtn">UNDO <kbd>Z</kbd></button>
+        <button class="ctl" id="skipBtn">SKIP <kbd>→</kbd></button>
+        <button class="ctl" id="prevWordBtn">← <kbd>←</kbd></button>
+        <button class="ctl" id="prevLineBtn">PREV LINE <kbd>↑</kbd></button>
+        <button class="ctl" id="nextLineBtn">NEXT LINE <kbd>↓</kbd></button>
+        <button class="ctl danger" id="resetBtn">RESET ALL</button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="list" id="list">
+    <div class="list-head">
+      <h3>Lines</h3>
+      <div class="count" id="recCount">0 / 0</div>
+    </div>
+    <div id="listBody"></div>
+  </aside>
+</main>
+
+<div class="output">
+  <div class="output-head">
+    <h3>Output</h3>
+    <div class="output-right">
+      <div class="out-tabs">
+        <button class="out-tab active" data-fmt="readable">読みやすい形式</button>
+        <button class="out-tab" data-fmt="js">JSコード形式</button>
+        <button class="out-tab" data-fmt="lrc">LRC形式</button>
+      </div>
+      <button class="ab" id="copyBtn">📋 COPY</button>
+      <button class="ab" id="downloadBtn">⬇ DOWNLOAD</button>
+    </div>
+  </div>
+  <textarea class="out-text" id="outText" readonly></textarea>
+</div>
+
+</div>
+
+<script>
+  // ===== Source: word-segmented lyrics =====
+  // Each entry is one displayable line. kind:'solo' = special single-tap marker.
+  const SOURCE = [
+    { text: 'Di YMMA kita bersatu, rakit masa depan baru',
+      words: ['Di','YMMA','kita','bersatu,','rakit','masa','depan','baru'] },
+    { text: 'Hapus variasi, buang rutinitas yang kaku',
+      words: ['Hapus','variasi,','buang','rutinitas','yang','kaku'] },
+    { text: 'Langkah pasti, inovasi jadi nyata',
+      words: ['Langkah','pasti,','inovasi','jadi','nyata'] },
+    { text: 'Ubah YMMA, satukan visi kita',
+      words: ['Ubah','YMMA,','satukan','visi','kita'] },
+    { text: 'ZEVA!', words: ['ZEVA!'] },
+    { text: 'Produksi tanpa cela, ukir sejarah',
+      words: ['Produksi','tanpa','cela,','ukir','sejarah'] },
+    { text: 'Variasi nol, YMMA maju jaya selamanya!',
+      words: ['Variasi','nol,','YMMA','maju','jaya','selamanya!'] },
+    { text: 'ZEVA!', words: ['ZEVA!'] },
+    { text: 'Standar baru di tangan kita',
+      words: ['Standar','baru','di','tangan','kita'] },
+    { text: 'Bawa kita ke puncak dunia!',
+      words: ['Bawa','kita','ke','puncak','dunia!'] },
+
+    { text: 'Data mengalir, sistem memandu pasti',
+      words: ['Data','mengalir,','sistem','memandu','pasti'] },
+    { text: 'Presisi mutlak, bangga di dalam hati',
+      words: ['Presisi','mutlak,','bangga','di','dalam','hati'] },
+    { text: 'Langkah pasti, inovasi jadi nyata',
+      words: ['Langkah','pasti,','inovasi','jadi','nyata'] },
+    { text: 'Ubah YMMA, satukan visi kita',
+      words: ['Ubah','YMMA,','satukan','visi','kita'] },
+    { text: 'ZEVA!', words: ['ZEVA!'] },
+    { text: 'Produksi tanpa cela, ukir sejarah',
+      words: ['Produksi','tanpa','cela,','ukir','sejarah'] },
+    { text: 'Variasi nol, YMMA maju jaya selamanya!',
+      words: ['Variasi','nol,','YMMA','maju','jaya','selamanya!'] },
+    { text: 'ZEVA!', words: ['ZEVA!'] },
+    { text: 'Standar baru di tangan kita',
+      words: ['Standar','baru','di','tangan','kita'] },
+    { text: 'Bawa kita ke puncak dunia!',
+      words: ['Bawa','kita','ke','puncak','dunia!'] },
+
+    { text: '[ Guitar Solo ]', kind: 'solo', words: ['[ Guitar Solo ]'] },
+
+    { text: 'Mengontrol variasi dengan tepat',
+      words: ['Mengontrol','variasi','dengan','tepat'] },
+    { text: 'Terlahir kembali, menjadi kuat',
+      words: ['Terlahir','kembali,','menjadi','kuat'] },
+    { text: 'Transformasi ini milik kita semua',
+      words: ['Transformasi','ini','milik','kita','semua'] },
+    { text: 'Dengan satu tekad bersama majukan YMMA',
+      words: ['Dengan','satu','tekad','bersama','majukan','YMMA'] },
+    { text: 'ZEVA!', words: ['ZEVA!'] },
+    { text: 'Produksi tanpa cela, ukir sejarah',
+      words: ['Produksi','tanpa','cela,','ukir','sejarah'] },
+    { text: 'Variasi nol, YMMA maju jaya selamanya!',
+      words: ['Variasi','nol,','YMMA','maju','jaya','selamanya!'] },
+    { text: 'ZEVA! Standar baru di tangan kita',
+      words: ['ZEVA!','Standar','baru','di','tangan','kita'] },
+    { text: 'Bawa kita ke puncak dunia!',
+      words: ['Bawa','kita','ke','puncak','dunia!'] },
+    { text: 'Satu visi, ZEVA...',
+      words: ['Satu','visi,','ZEVA...'] },
+  ];
+
+  const STORAGE = 'zeva.wordsync.v1';
+
+  // State model:
+  //   lines: [{ text, kind, words: [{w, t}] }]
+  //   cursor: { line: i, word: j } pointing to NEXT word to tap
+  function freshLines() {
+    return SOURCE.map(s => ({
+      text: s.text,
+      kind: s.kind || 'lyric',
+      words: s.words.map(w => ({ w, t: null }))
+    }));
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE);
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (Array.isArray(p.lines) && p.lines.length === SOURCE.length) {
+          // Always start the cursor at the very first word on launch so that
+          // no word looks "active" until the user actually taps. Recorded
+          // word times are preserved (re-taps overwrite them in order).
+          p.cursor = { line: 0, word: 0 };
+          return p;
+        }
+      }
+    } catch(e){}
+    return { lines: freshLines(), cursor: { line: 0, word: 0 } };
+  }
+  function saveState() { localStorage.setItem(STORAGE, JSON.stringify(state)); }
+
+  let state = loadState();
+  // Sanity: ensure word counts match
+  state.lines.forEach((l, i) => {
+    if (!l.words || l.words.length !== SOURCE[i].words.length) {
+      l.words = SOURCE[i].words.map(w => ({ w, t: null }));
+    }
+    l.text = SOURCE[i].text;
+    l.kind = SOURCE[i].kind || 'lyric';
+  });
+
+  let reactMs = parseInt(localStorage.getItem('zeva.wordsync.react') || '150', 10);
+
+  // ===== Audio =====
+  const audio = document.getElementById('audio');
+  const playBtn = document.getElementById('playBtn');
+  const playIcon = document.getElementById('playIcon');
+  const seekBar = document.getElementById('seekBar');
+  const seekFill = document.getElementById('seekFill');
+  const curTimeEl = document.getElementById('curTime');
+  const durTimeEl = document.getElementById('durTime');
+
+  const playSvg = '<path d="M8 5v14l11-7z"/>';
+  const pauseSvg = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+
+  playBtn.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
+  audio.addEventListener('play', () => playIcon.innerHTML = pauseSvg);
+  audio.addEventListener('pause', () => playIcon.innerHTML = playSvg);
+  audio.addEventListener('ended', () => playIcon.innerHTML = playSvg);
+
+  function fmtT(t) {
+    if (t == null || isNaN(t) || t < 0) return '0:00';
+    const m = Math.floor(t / 60);
+    const s = Math.floor(t % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  }
+  function fmtTms(t) {
+    if (t == null || isNaN(t) || t < 0) return '—:——';
+    const m = Math.floor(t / 60);
+    const s = (t % 60).toFixed(2).padStart(5, '0');
+    return `${m}:${s}`;
+  }
+
+  audio.addEventListener('loadedmetadata', () => { durTimeEl.textContent = fmtT(audio.duration); });
+  audio.addEventListener('timeupdate', () => {
+    const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+    seekFill.style.width = pct + '%';
+    curTimeEl.textContent = fmtT(audio.currentTime);
+  });
+  seekBar.addEventListener('click', (e) => {
+    const rect = seekBar.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    if (!isNaN(audio.duration)) audio.currentTime = pct * audio.duration;
+  });
+  document.querySelectorAll('.audio-actions .ab').forEach(b => {
+    b.addEventListener('click', () => {
+      audio.currentTime = Math.max(0, audio.currentTime + parseFloat(b.dataset.skip));
+    });
+  });
+
+  // ===== UI refs =====
+  const lnPrev = document.getElementById('lnPrev');
+  const lnCur = document.getElementById('lnCur');
+  const lnNext = document.getElementById('lnNext');
+  const lnNext2 = document.getElementById('lnNext2');
+  const statWord = document.getElementById('statWord');
+  const statWordTotal = document.getElementById('statWordTotal');
+  const statLine = document.getElementById('statLine');
+  const statLineTotal = document.getElementById('statLineTotal');
+  const statRec = document.getElementById('statRec');
+  const listBody = document.getElementById('listBody');
+  const recCount = document.getElementById('recCount');
+  const tapBtn = document.getElementById('tapBtn');
+  const outText = document.getElementById('outText');
+  const reactSlider = document.getElementById('reactSlider');
+  const reactVal = document.getElementById('reactVal');
+
+  reactSlider.value = reactMs;
+  reactVal.textContent = reactMs;
+  reactSlider.addEventListener('input', () => {
+    reactMs = parseInt(reactSlider.value, 10);
+    reactVal.textContent = reactMs;
+    localStorage.setItem('zeva.wordsync.react', reactMs);
+    renderOutput();
+  });
+
+  // Totals
+  const totalWords = SOURCE.reduce((sum, l) => sum + l.words.length, 0);
+  statWordTotal.textContent = totalWords;
+  statLineTotal.textContent = SOURCE.length;
+
+  function renderLineDisplay(el, lineIdx, isCurrent) {
+    el.innerHTML = '';
+    el.classList.remove('solo');
+    if (lineIdx < 0 || lineIdx >= state.lines.length) {
+      el.textContent = '—';
+      return;
+    }
+    const line = state.lines[lineIdx];
+    if (line.kind === 'solo') el.classList.add('solo');
+
+    const c = state.cursor;
+    const isActiveLine = isCurrent && c.line === lineIdx;
+    // "Just tapped" word = the BIG/active one (cursor points to next, so active is cursor.word - 1)
+    const activeIdx = isActiveLine ? c.word - 1 : -1;
+    // "Next to tap" word = small marker
+    const nextIdx = isActiveLine ? c.word : -1;
+
+    line.words.forEach((wd, j) => {
+      const span = document.createElement('span');
+      span.className = 'cw';
+      if (line.kind === 'solo') span.classList.add('solo-token');
+      if (isActiveLine) {
+        if (j === activeIdx) span.classList.add('active');
+        else if (j === nextIdx) span.classList.add('next');
+        else if (j < activeIdx) span.classList.add('done');
+        else span.classList.add('pending');
+      } else {
+        span.classList.add('pending');
+      }
+      span.textContent = wd.w;
+      el.appendChild(span);
+    });
+  }
+
+  function renderStage() {
+    const c = state.cursor;
+    // Adjust cursor if we've reached the end
+    if (c.line >= state.lines.length) {
+      lnCur.innerHTML = '<span class="cw active">✓ 全単語完了</span>';
+      renderLineDisplay(lnPrev, c.line - 1, false);
+      renderLineDisplay(lnNext, c.line + 1, false);
+      renderLineDisplay(lnNext2, c.line + 2, false);
+    } else {
+      renderLineDisplay(lnPrev, c.line - 1, false);
+      renderLineDisplay(lnCur, c.line, true);
+      lnCur.classList.toggle('solo', state.lines[c.line].kind === 'solo');
+      renderLineDisplay(lnNext, c.line + 1, false);
+      renderLineDisplay(lnNext2, c.line + 2, false);
+    }
+
+    // Stats
+    let wordIdx = 0;
+    for (let i = 0; i < c.line; i++) wordIdx += state.lines[i].words.length;
+    wordIdx += c.word;
+    statWord.textContent = wordIdx;
+    statLine.textContent = c.line < state.lines.length ? c.line + 1 : state.lines.length;
+
+    const recorded = state.lines.reduce((sum, l) =>
+      sum + l.words.filter(w => w.t !== null).length, 0);
+    statRec.textContent = `記録: ${recorded}`;
+    recCount.textContent = `${recorded} / ${totalWords}`;
+  }
+
+  function renderList() {
+    listBody.innerHTML = '';
+    state.lines.forEach((line, i) => {
+      const row = document.createElement('div');
+      row.className = 'li';
+      if (line.kind === 'solo') row.classList.add('solo-li');
+      if (i === state.cursor.line) row.classList.add('cur-li');
+      const recCnt = line.words.filter(w => w.t !== null).length;
+      const total = line.words.length;
+      if (recCnt > 0) row.classList.add('recorded');
+
+      const firstT = line.words[0].t;
+      const lineStart = firstT !== null ? Math.max(0, firstT - 0.2) : null;
+
+      row.innerHTML = `
+        <div class="li-head">
+          <span class="lt ${firstT === null ? 'empty':''}">${fmtT(lineStart)}</span>
+          <span class="prg">${recCnt}/${total}</span>
+        </div>
+        <div class="li-text">${escapeHTML(line.text)}</div>
+        <div class="li-bar"><div style="width:${(recCnt/total)*100}%"></div></div>
+      `;
+      row.addEventListener('click', () => {
+        // Jump to first unrecorded word of this line, or first word
+        const firstNull = line.words.findIndex(w => w.t === null);
+        state.cursor = { line: i, word: firstNull >= 0 ? firstNull : 0 };
+        saveState();
+        renderAll();
+        scrollCurIntoView();
+      });
+      listBody.appendChild(row);
+    });
+    scrollCurIntoView();
+  }
+
+  function scrollCurIntoView() {
+    requestAnimationFrame(() => {
+      const cur = listBody.querySelector('.li.cur-li');
+      if (cur) cur.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    });
+  }
+
+  function escapeHTML(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function renderOutput() {
+    const fmt = document.querySelector('.out-tab.active').dataset.fmt;
+    const lineStart = (l) => {
+      const f = l.words[0].t;
+      if (f === null) return null;
+      if (l.kind === 'solo') return f;
+      return Math.max(0, f - 0.2);
+    };
+
+    if (fmt === 'readable') {
+      const out = [];
+      state.lines.forEach((l) => {
+        const ls = lineStart(l);
+        out.push(`${(ls !== null ? fmtTms(ls) : '—:——').padStart(8)}  ${l.text}`);
+        if (l.kind !== 'solo') {
+          l.words.forEach(w => {
+            const ts = w.t !== null ? fmtTms(w.t) : '—:——';
+            out.push(`            ${ts.padStart(8)}  ${w.w}`);
+          });
+        }
+      });
+      outText.value = out.join('\n');
+    } else if (fmt === 'js') {
+      const rows = [];
+      rows.push('const klines = [');
+      state.lines.forEach((l) => {
+        const ls = lineStart(l);
+        const lsStr = ls !== null ? ls.toFixed(2) : 'null';
+        const safeText = l.text.replace(/'/g, "\\'");
+        if (l.kind === 'solo') {
+          rows.push(`  { time: ${lsStr}, text: '${safeText}', kind: 'solo' },`);
+        } else {
+          const wordPairs = l.words.map(w =>
+            `[${(w.t !== null ? w.t.toFixed(2) : 'null')}, '${w.w.replace(/'/g,"\\'")}']`
+          ).join(', ');
+          rows.push(`  { time: ${lsStr}, text: '${safeText}',`);
+          rows.push(`    words: [${wordPairs}] },`);
+        }
+      });
+      rows.push('];');
+      outText.value = rows.join('\n');
+    } else if (fmt === 'lrc') {
+      // Enhanced LRC with per-word timestamps
+      const out = [];
+      state.lines.forEach((l) => {
+        const ls = lineStart(l);
+        const lsTag = ls !== null
+          ? `[${String(Math.floor(ls/60)).padStart(2,'0')}:${(ls%60).toFixed(2).padStart(5,'0')}]`
+          : '[--:--.--]';
+        if (l.kind === 'solo') {
+          out.push(`${lsTag}${l.text}`);
+        } else {
+          const inner = l.words.map(w => {
+            const wt = w.t !== null
+              ? `<${String(Math.floor(w.t/60)).padStart(2,'0')}:${(w.t%60).toFixed(2).padStart(5,'0')}>`
+              : '<--:--.--> ';
+            return `${wt}${w.w}`;
+          }).join(' ');
+          out.push(`${lsTag}${inner}`);
+        }
+      });
+      outText.value = out.join('\n');
+    }
+  }
+
+  function renderAll() {
+    renderStage();
+    renderList();
+    renderOutput();
+  }
+
+  // ===== Tap =====
+  function flash() {
+    tapBtn.classList.add('flash');
+    setTimeout(() => tapBtn.classList.remove('flash'), 100);
+  }
+
+  function tap() {
+    const c = state.cursor;
+    // If the current line is fully tapped, jump to next line first
+    if (c.line < state.lines.length && c.word >= state.lines[c.line].words.length) {
+      c.line++;
+      c.word = 0;
+    }
+    if (c.line >= state.lines.length) return;
+    // Record the current word at this moment
+    const t = Math.max(0, audio.currentTime - (reactMs / 1000));
+    state.lines[c.line].words[c.word].t = t;
+    // Advance cursor by 1 word (cursor may now sit at words.length = line complete)
+    c.word++;
+    saveState();
+    renderAll();
+    flash();
+  }
+
+  function undo() {
+    const c = state.cursor;
+    if (c.word === 0) {
+      if (c.line === 0) return;
+      c.line--;
+      c.word = state.lines[c.line].words.length;
+    }
+    if (c.word === 0) return;
+    c.word--;
+    state.lines[c.line].words[c.word].t = null;
+    saveState();
+    renderAll();
+  }
+  function skip() {
+    const c = state.cursor;
+    if (c.line >= state.lines.length) return;
+    if (c.word >= state.lines[c.line].words.length) {
+      c.line++; c.word = 0;
+      if (c.line >= state.lines.length) { saveState(); renderAll(); return; }
+    }
+    c.word++;
+    saveState();
+    renderAll();
+  }
+  function prevWord() {
+    const c = state.cursor;
+    if (c.word > 0) c.word--;
+    else if (c.line > 0) {
+      c.line--;
+      c.word = state.lines[c.line].words.length;
+    }
+    saveState();
+    renderAll();
+  }
+  function prevLine() {
+    const c = state.cursor;
+    if (c.word > 0) { c.word = 0; }
+    else if (c.line > 0) { c.line--; c.word = 0; }
+    saveState();
+    renderAll();
+  }
+  function nextLine() {
+    const c = state.cursor;
+    if (c.line < state.lines.length - 1) {
+      c.line++;
+      c.word = 0;
+    } else if (c.line === state.lines.length - 1 && c.word < state.lines[c.line].words.length) {
+      c.line++;
+      c.word = 0;
+    }
+    saveState();
+    renderAll();
+  }
+  function resetAll() {
+    if (!confirm('全ての記録タイミングをクリアしますか？')) return;
+    state = { lines: freshLines(), cursor: { line: 0, word: 0 } };
+    saveState();
+    renderAll();
+  }
+
+  tapBtn.addEventListener('click', tap);
+  document.getElementById('undoBtn').addEventListener('click', undo);
+  document.getElementById('skipBtn').addEventListener('click', skip);
+  document.getElementById('prevWordBtn').addEventListener('click', prevWord);
+  document.getElementById('prevLineBtn').addEventListener('click', prevLine);
+  document.getElementById('nextLineBtn').addEventListener('click', nextLine);
+  document.getElementById('resetBtn').addEventListener('click', resetAll);
+
+  document.querySelectorAll('.out-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.out-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      renderOutput();
+    });
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(outText.value);
+      const b = document.getElementById('copyBtn');
+      const orig = b.textContent;
+      b.textContent = '✓ COPIED';
+      setTimeout(() => b.textContent = orig, 1200);
+    } catch (e) {
+      outText.select(); document.execCommand('copy');
+    }
+  });
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const blob = new Blob([outText.value], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'zeva-word-timings.txt'; a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ===== Keys =====
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea') return;
+    if (e.code === 'Space') { e.preventDefault(); tap(); }
+    else if (e.key === 'z' || e.key === 'Z') { e.preventDefault(); undo(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); skip(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevWord(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); prevLine(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); nextLine(); }
+    else if (e.key === 'p' || e.key === 'P') { e.preventDefault(); audio.paused ? audio.play() : audio.pause(); }
+  });
+
+  renderAll();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Analysis & sync tooling intermediates (not part of the public site)
+detect_timings.py
+map_lines.py
+onsets.txt
+timings.json
+
+# Local raw audio / temp
+*.wav
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini

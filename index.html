@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SATU VISI ZEVA — Official Anthem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #050608;
+    --bg-2: #0b0d12;
+    --panel: rgba(18, 20, 27, 0.72);
+    --line: rgba(255, 255, 255, 0.08);
+    --text: #e8eaf0;
+    --muted: #7a8090;
+    --accent: #ff2d3a;
+    --accent-2: #ff6b2c;
+    --gold: #f5c542;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Animated background ===== */
+  .bg-grid {
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .bg-glow {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(900px 600px at 15% 10%, rgba(255, 45, 58, 0.18), transparent 60%),
+      radial-gradient(800px 500px at 85% 90%, rgba(255, 107, 44, 0.12), transparent 60%),
+      radial-gradient(600px 400px at 50% 50%, rgba(70, 130, 255, 0.05), transparent 60%);
+    animation: float 18s ease-in-out infinite alternate;
+  }
+  @keyframes float {
+    0% { transform: translate3d(0,0,0); }
+    100% { transform: translate3d(-2%, 2%, 0); }
+  }
+  .scanline {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.012) 0px,
+      rgba(255,255,255,0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  /* ===== Top bar ===== */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 36px;
+    backdrop-filter: blur(12px);
+    background: linear-gradient(to bottom, rgba(5,6,8,0.85), rgba(5,6,8,0.0));
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s, background .3s;
+  }
+  .topbar.scrolled { border-bottom-color: var(--line); background: rgba(5,6,8,0.85); }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 0.18em;
+  }
+  .brand .dot { width: 10px; height: 10px; background: var(--accent); border-radius: 50%;
+    box-shadow: 0 0 14px var(--accent); animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .nav { display: flex; gap: 28px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .nav a { color: var(--muted); text-decoration: none; transition: color .2s; }
+  .nav a:hover { color: var(--text); }
+
+  /* ===== Hero ===== */
+  .hero {
+    position: relative; z-index: 2;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 60px;
+    padding: 140px 80px 80px;
+    align-items: center;
+  }
+  .hero-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex; gap: 24px;
+    margin-bottom: 28px;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 8px; }
+  .hero-meta .tag { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--accent); }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 11vw, 180px);
+    line-height: 0.86;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .hero-title .line1 { display: block; color: var(--text); }
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(95deg, var(--accent) 0%, var(--accent-2) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+  }
+  .hero-title .line2::after {
+    content: '';
+    position: absolute; bottom: -10px; left: 0;
+    width: 120px; height: 6px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+  .hero-sub {
+    font-size: 16px; line-height: 1.7;
+    color: #b9bdc8; max-width: 540px; margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 16px 26px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    text-decoration: none; color: var(--text);
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: all .25s cubic-bezier(.4,0,.2,1);
+    position: relative; overflow: hidden;
+  }
+  .btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(95deg, var(--accent), var(--accent-2));
+    transform: translateX(-100%);
+    transition: transform .35s cubic-bezier(.4,0,.2,1);
+    z-index: -1;
+  }
+  .btn:hover::before { transform: translateX(0); }
+  .btn:hover { border-color: transparent; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,45,58,0.25); }
+  .btn.primary {
+    background: linear-gradient(95deg, var(--accent), var(--accent-2));
+    border-color: transparent;
+    color: #fff;
+  }
+  .btn.primary:hover { box-shadow: 0 14px 40px rgba(255,45,58,0.45); }
+  .btn svg { width: 14px; height: 14px; }
+
+  /* ===== Cover art ===== */
+  .cover-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    max-width: 560px;
+    width: 100%;
+    margin-left: auto;
+  }
+  .cover {
+    position: absolute; inset: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,45,58,0.4), transparent 60%),
+      radial-gradient(circle at 75% 80%, rgba(255,107,44,0.35), transparent 55%),
+      linear-gradient(135deg, #0a0b10 0%, #1a0c10 60%, #2a1208 100%);
+    border: 1px solid var(--line);
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(255,255,255,0.04),
+      inset 0 0 80px rgba(255,45,58,0.08);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(45deg, transparent 0, transparent 30px, rgba(255,255,255,0.02) 30px, rgba(255,255,255,0.02) 31px);
+  }
+  .cover-zeva {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 16vw, 220px);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    background: linear-gradient(180deg, #fff 0%, #ff6b2c 60%, #ff2d3a 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 0 80px rgba(255,45,58,0.3);
+    position: relative; z-index: 2;
+  }
+  .cover-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.4em;
+    color: var(--muted);
+    margin-top: 8px; position: relative; z-index: 2;
+  }
+  .cover-corner {
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.4);
+    z-index: 2;
+  }
+  .cover-corner.tl { top: 16px; left: 18px; }
+  .cover-corner.tr { top: 16px; right: 18px; text-align: right; }
+  .cover-corner.bl { bottom: 16px; left: 18px; }
+  .cover-corner.br { bottom: 16px; right: 18px; text-align: right; color: var(--accent); }
+  .cover-frame::before, .cover-frame::after,
+  .cover-frame > i::before, .cover-frame > i::after {
+    content: ''; position: absolute; width: 24px; height: 24px;
+    border: 1.5px solid var(--accent); z-index: 3;
+  }
+  .cover-frame::before { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+  .cover-frame::after { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+  .cover-frame > i::before { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+  .cover-frame > i::after { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+  /* ===== Player section ===== */
+  .player-section {
+    position: relative; z-index: 2;
+    padding: 60px 80px 80px;
+  }
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 36px; padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px; letter-spacing: 0.04em;
+  }
+  .section-title .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--accent); margin-right: 14px; vertical-align: middle;
+    letter-spacing: 0.2em;
+  }
+  .section-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .player {
+    background: var(--panel);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .player::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2), transparent);
+  }
+
+  .tabs {
+    display: flex; gap: 6px; margin-bottom: 28px;
+    background: rgba(0,0,0,0.3);
+    padding: 4px;
+    border-radius: 4px;
+    width: fit-content;
+    border: 1px solid var(--line);
+  }
+  .tab {
+    padding: 10px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+    background: transparent; border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all .2s;
+  }
+  .tab.active {
+    background: linear-gradient(95deg, var(--accent), var(--accent-2));
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(255,45,58,0.35);
+  }
+  .tab:not(.active):hover { color: var(--text); background: rgba(255,255,255,0.04); }
+
+  .player-main {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 28px;
+    align-items: center;
+  }
+  .play-btn {
+    width: 76px; height: 76px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(255,45,58,0.4);
+    transition: transform .2s;
+    flex-shrink: 0;
+  }
+  .play-btn:hover { transform: scale(1.06); }
+  .play-btn:active { transform: scale(0.98); }
+  .play-btn svg { width: 30px; height: 30px; transition: transform .2s; }
+
+  .track-info { min-width: 0; }
+  .track-title-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  .track-title-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px; letter-spacing: 0.04em; margin-bottom: 14px;
+  }
+  .progress {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 999px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    width: 0%;
+    border-radius: 999px;
+    position: relative;
+    transition: width .1s linear;
+  }
+  .progress-fill::after {
+    content: '';
+    position: absolute; right: -6px; top: 50%;
+    transform: translateY(-50%);
+    width: 12px; height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255,45,58,0.6);
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .progress:hover .progress-fill::after { opacity: 1; }
+  .times {
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .player-side { display: flex; gap: 10px; flex-direction: column; }
+  .download-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    text-decoration: none; color: var(--text);
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.02);
+    border-radius: 4px;
+    transition: all .25s;
+    white-space: nowrap;
+  }
+  .download-btn:hover {
+    border-color: var(--accent);
+    background: rgba(255,45,58,0.08);
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+  .download-btn svg { width: 13px; height: 13px; }
+
+  /* ===== Visualizer bars ===== */
+  .viz {
+    display: flex; gap: 3px; align-items: end;
+    height: 28px;
+    margin-top: 14px;
+  }
+  .viz-bar {
+    width: 3px;
+    background: linear-gradient(to top, var(--accent), var(--accent-2));
+    border-radius: 2px;
+    height: 20%;
+    opacity: 0.3;
+    transition: height .15s, opacity .15s;
+  }
+  .viz.playing .viz-bar { opacity: 1; animation: bar 1.2s ease-in-out infinite; }
+  .viz.playing .viz-bar:nth-child(odd) { animation-duration: 0.9s; }
+  .viz.playing .viz-bar:nth-child(3n) { animation-duration: 1.4s; }
+  .viz.playing .viz-bar:nth-child(5n) { animation-duration: 1.1s; }
+  @keyframes bar {
+    0%,100% { height: 20%; }
+    50% { height: 100%; }
+  }
+
+  /* ===== Lyrics ===== */
+  .lyrics-section {
+    position: relative; z-index: 2;
+    padding: 60px 80px 120px;
+  }
+  .lyrics-wrap {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .lyrics-side {
+    position: sticky; top: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--muted);
+    line-height: 2.2;
+  }
+  .lyrics-side a {
+    display: block;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 1px solid var(--line);
+    padding-left: 12px;
+    transition: all .2s;
+  }
+  .lyrics-side a:hover, .lyrics-side a.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    padding-left: 16px;
+  }
+
+  .lyrics {
+    background: var(--panel);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 56px 56px;
+    line-height: 2;
+    position: relative;
+    overflow: hidden;
+  }
+  .lyrics::before {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+  }
+  .lyric-section { margin-bottom: 36px; }
+  .lyric-section:last-child { margin-bottom: 0; }
+  .lyric-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 12px;
+    border: 1px solid rgba(255,45,58,0.3);
+    border-radius: 3px;
+    margin-bottom: 16px;
+    background: rgba(255,45,58,0.05);
+  }
+  .lyric-line {
+    font-size: 19px;
+    color: var(--text);
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .lyric-line.note {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .lyric-section.chorus .lyric-line {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    background: linear-gradient(95deg, #fff 0%, var(--accent-2) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: 8px;
+  }
+  .lyric-section.outro .lyric-line {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== Karaoke ===== */
+  .karaoke-section {
+    position: relative; z-index: 2;
+    padding: 60px 80px;
+  }
+  .kstage {
+    position: relative;
+    background:
+      radial-gradient(ellipse at top, rgba(255,45,58,0.18), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(255,107,44,0.1), transparent 55%),
+      linear-gradient(180deg, #0c0e14 0%, #050608 100%);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    min-height: 520px;
+    display: flex; flex-direction: column;
+  }
+  .kstage::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), transparent);
+    z-index: 3;
+  }
+  .kstage::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(to bottom, transparent 0, transparent 2px, rgba(255,255,255,0.014) 2px, rgba(255,255,255,0.014) 3px);
+    pointer-events: none; z-index: 1;
+  }
+  .kstage-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 30px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+    position: relative; z-index: 2;
+  }
+  .kstage-meta .lit { color: var(--accent); }
+  .kstage-meta .rec-dot {
+    display: inline-block;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); margin-right: 8px;
+    animation: rec-blink 1.2s infinite;
+    vertical-align: middle;
+  }
+  @keyframes rec-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .kstage-body {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 30px 40px;
+    position: relative; z-index: 2;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%);
+  }
+  .kline {
+    margin: 10px 0;
+    line-height: 1.2;
+    transition: all .45s cubic-bezier(.4,0,.2,1);
+    max-width: 100%;
+    word-break: break-word;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
+  }
+  .kline.k-p2 { font-size: 20px; color: rgba(255,255,255,0.12); }
+  .kline.k-p1 { font-size: 28px; color: rgba(255,255,255,0.32); }
+  .kline.k-cur {
+    font-size: clamp(36px, 6.5vw, 78px);
+    position: relative;
+    padding: 6px 24px;
+    line-height: 1.15;
+  }
+
+  /* Per-word styling inside current line */
+  .kw {
+    display: inline-block;
+    margin: 0 0.16em;
+    color: rgba(255,255,255,0.22);
+    transition:
+      color .35s ease,
+      transform .25s cubic-bezier(.34,1.56,.64,1),
+      opacity .35s ease,
+      filter .35s ease,
+      text-shadow .35s ease;
+    position: relative;
+    transform-origin: center bottom;
+  }
+  .kw.sung {
+    color: rgba(255,255,255,0.85);
+  }
+  .kw.singing {
+    color: transparent;
+    background: linear-gradient(95deg, #fff 0%, #ffe2c0 35%, var(--accent-2) 75%, var(--accent) 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transform: scale(1.18) translateY(-6px);
+    filter: drop-shadow(0 0 30px rgba(255,107,44,0.7));
+    text-shadow: 0 0 40px rgba(255,45,58,0.6);
+  }
+  .kw.singing::after {
+    content: '';
+    position: absolute;
+    left: 10%; right: 10%; bottom: -8px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    border-radius: 99px;
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .kline.k-n1 { font-size: 28px; color: rgba(255,255,255,0.32); }
+  .kline.k-n2 { font-size: 20px; color: rgba(255,255,255,0.12); }
+
+  /* Section tag style overrides everything */
+  .kline.is-tag {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 16px !important;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+  }
+  .kline.k-cur.is-tag {
+    font-size: 22px !important;
+    color: var(--accent-2);
+    text-shadow: 0 0 30px rgba(255,107,44,0.4);
+  }
+  .kline.k-cur.is-tag .kw {
+    margin: 0;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(245,197,66,0.5);
+  }
+  .kline.k-cur.is-tag .kw.singing {
+    color: var(--gold);
+    -webkit-text-fill-color: var(--gold);
+    background: none;
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 40px rgba(245,197,66,0.8));
+    animation: solo-breath 2s ease-in-out infinite;
+  }
+  .kline.k-cur.is-tag .kw.singing::after { display: none; }
+  @keyframes solo-breath {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+  }
+
+  /* Pulse on tag-only sections (Guitar Solo etc.) */
+  .kstage-body.solo .kline.k-cur {
+    animation: solo-pulse 2s ease-in-out infinite;
+  }
+  @keyframes solo-pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+  }
+
+  /* Idle state */
+  .kstage-body.idle .kline.k-cur {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px !important;
+    color: var(--muted);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .kstage-body.idle .kline.k-cur .kw { color: var(--muted); -webkit-text-fill-color: var(--muted); background: none; transform: none; filter: none; }
+
+  .kstage-eq {
+    display: flex; gap: 3px; align-items: end; justify-content: center;
+    height: 28px; padding: 14px 0 20px;
+    position: relative; z-index: 2;
+  }
+  .kstage-eq .b {
+    width: 3px;
+    background: linear-gradient(to top, var(--accent), var(--accent-2));
+    border-radius: 2px; height: 20%; opacity: 0.3;
+    transition: height .15s, opacity .15s;
+  }
+  .kstage-body.live ~ .kstage-eq .b {
+    opacity: 1;
+    animation: keq 1.2s ease-in-out infinite;
+  }
+  .kstage-body.live ~ .kstage-eq .b:nth-child(odd)  { animation-duration: 0.9s; }
+  .kstage-body.live ~ .kstage-eq .b:nth-child(3n)   { animation-duration: 1.4s; }
+  .kstage-body.live ~ .kstage-eq .b:nth-child(5n)   { animation-duration: 1.1s; }
+  .kstage-body.live ~ .kstage-eq .b:nth-child(7n)   { animation-duration: 1.6s; }
+  @keyframes keq {
+    0%, 100% { height: 20%; }
+    50%      { height: 100%; }
+  }
+
+  .kfs-btn {
+    position: absolute; top: 18px; right: 18px;
+    z-index: 4;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--line);
+    color: var(--text);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+  }
+  .kfs-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .kfs-btn svg { width: 16px; height: 16px; }
+
+  /* Fullscreen mode */
+  .kstage:fullscreen,
+  .kstage.is-fs {
+    border-radius: 0;
+    min-height: 100vh;
+    width: 100vw; height: 100vh;
+  }
+  .kstage:fullscreen .kstage-body,
+  .kstage.is-fs .kstage-body {
+    padding: 60px;
+  }
+  .kstage:fullscreen .kline.k-cur,
+  .kstage.is-fs .kline.k-cur {
+    font-size: clamp(48px, 9vw, 130px);
+  }
+  .kstage:fullscreen .kline.k-p1,
+  .kstage:fullscreen .kline.k-n1,
+  .kstage.is-fs .kline.k-p1,
+  .kstage.is-fs .kline.k-n1 { font-size: 40px; }
+  .kstage:fullscreen .kline.k-p2,
+  .kstage:fullscreen .kline.k-n2,
+  .kstage.is-fs .kline.k-p2,
+  .kstage.is-fs .kline.k-n2 { font-size: 28px; }
+
+  /* ===== Footer ===== */
+  footer {
+    position: relative; z-index: 2;
+    padding: 40px 80px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  footer .accent { color: var(--accent); }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 980px) {
+    .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; gap: 50px; }
+    .cover-wrap { margin: 0 auto; max-width: 420px; }
+    .player-section, .lyrics-section { padding-left: 24px; padding-right: 24px; }
+    .lyrics-wrap { grid-template-columns: 1fr; gap: 30px; }
+    .lyrics-side { position: static; display: flex; flex-wrap: wrap; gap: 8px; line-height: 1; }
+    .lyrics-side a { border-left: none; border: 1px solid var(--line); padding: 6px 10px; border-radius: 3px; }
+    .lyrics-side a:hover, .lyrics-side a.active { padding-left: 10px; }
+    .player-main { grid-template-columns: auto 1fr; }
+    .player-side { grid-column: 1 / -1; flex-direction: row; }
+    .download-btn { flex: 1; justify-content: center; }
+    .lyrics { padding: 36px 24px; }
+    .topbar { padding: 14px 20px; }
+    .nav { display: none; }
+    footer { padding: 30px 24px; flex-direction: column; gap: 14px; text-align: center; }
+    .section-title { font-size: 38px; }
+    .karaoke-section { padding: 40px 24px; }
+    .kstage { min-height: 420px; }
+    .kstage-meta { padding: 14px 18px; font-size: 9px; letter-spacing: 0.2em; }
+    .kstage-body { padding: 20px 16px; }
+    .kline.k-cur { font-size: 36px; }
+    .kline.k-p1, .kline.k-n1 { font-size: 18px; }
+    .kline.k-p2, .kline.k-n2 { font-size: 14px; }
+    .kline.is-tag { font-size: 12px !important; }
+    .kline.k-cur.is-tag { font-size: 14px !important; }
+  }
+
+  /* ===== Phone (≤ 600px) ===== */
+  @media (max-width: 600px) {
+    /* topbar */
+    .topbar { padding: 12px 14px; }
+    .brand { font-size: 17px; letter-spacing: 0.14em; gap: 8px; }
+    .brand .dot { width: 7px; height: 7px; }
+
+    /* hero */
+    .hero { padding: 96px 16px 40px; gap: 36px; }
+    .hero-meta { font-size: 9px; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; letter-spacing: 0.22em; }
+    .hero-meta .tag { padding: 3px 8px; }
+    .hero-title { font-size: clamp(54px, 18vw, 92px); margin-bottom: 18px; }
+    .hero-title .line2::after { width: 80px; height: 4px; bottom: -6px; }
+    .hero-sub { font-size: 14px; margin-bottom: 28px; line-height: 1.6; }
+    .hero-actions { gap: 10px; }
+    .btn { padding: 13px 20px; font-size: 11px; letter-spacing: 0.16em; gap: 10px; flex: 1; min-width: 0; justify-content: center; }
+    .cover-wrap { max-width: 100%; }
+    .cover-zeva { font-size: clamp(64px, 22vw, 130px); }
+    .cover-sub { font-size: 9px; letter-spacing: 0.3em; }
+    .cover-corner { font-size: 8px; letter-spacing: 0.2em; }
+    .cover-corner.tl, .cover-corner.tr { top: 10px; }
+    .cover-corner.bl, .cover-corner.br { bottom: 10px; }
+    .cover-corner.tl, .cover-corner.bl { left: 12px; }
+    .cover-corner.tr, .cover-corner.br { right: 12px; }
+    .cover-frame::before, .cover-frame::after,
+    .cover-frame > i::before, .cover-frame > i::after { width: 16px; height: 16px; }
+
+    /* section heads */
+    .player-section { padding: 40px 16px 50px; }
+    .lyrics-section { padding: 30px 16px 80px; }
+    .karaoke-section { padding: 30px 12px; }
+    .section-head { margin-bottom: 22px; padding-bottom: 12px; flex-wrap: wrap; gap: 6px; }
+    .section-title { font-size: 28px; }
+    .section-title .num { font-size: 11px; margin-right: 10px; }
+    .section-sub { font-size: 9px; letter-spacing: 0.22em; }
+
+    /* player */
+    .player { padding: 18px 14px; border-radius: 4px; }
+    .tabs { width: 100%; gap: 4px; padding: 3px; margin-bottom: 20px; }
+    .tab { flex: 1; padding: 9px 6px; font-size: 9px; letter-spacing: 0.14em; text-align: center; }
+    .player-main { grid-template-columns: auto 1fr; gap: 14px; }
+    .play-btn { width: 60px; height: 60px; }
+    .play-btn svg { width: 24px; height: 24px; }
+    .track-title-label { font-size: 9px; letter-spacing: 0.22em; margin-bottom: 4px; }
+    .track-title-main { font-size: 22px; margin-bottom: 10px; }
+    .times { font-size: 10px; }
+    .viz { height: 22px; }
+    .player-side { gap: 8px; }
+    .download-btn { padding: 12px 12px; font-size: 9px; letter-spacing: 0.16em; gap: 7px; }
+    .download-btn svg { width: 11px; height: 11px; }
+
+    /* karaoke */
+    .kstage { min-height: 360px; border-radius: 4px; }
+    .kstage-meta {
+      padding: 12px 14px; font-size: 8px; letter-spacing: 0.18em; gap: 8px;
+      flex-wrap: wrap;
+    }
+    .kstage-body { padding: 14px 10px; }
+    .kline { margin: 6px 0; }
+    .kline.k-cur { font-size: 28px !important; padding: 4px 8px; }
+    .kline.k-p1, .kline.k-n1 { font-size: 14px; }
+    .kline.k-p2, .kline.k-n2 { font-size: 11px; }
+    .kline.is-tag { font-size: 10px !important; letter-spacing: 0.3em; }
+    .kline.k-cur.is-tag { font-size: 12px !important; }
+    .kw { margin: 0 0.1em; }
+    .kw.singing { transform: scale(1.1) translateY(-3px); }
+    .kw.singing::after { bottom: -4px; height: 2px; }
+    .kstage-eq { padding: 8px 0 14px; height: 22px; }
+    .kstage-eq .b:nth-child(n+19) { display: none; }
+    .kfs-btn { width: 32px; height: 32px; top: 12px; right: 12px; }
+    .kfs-btn svg { width: 14px; height: 14px; }
+
+    /* lyrics */
+    .lyrics { padding: 24px 16px; }
+    .lyric-section { margin-bottom: 26px; }
+    .lyric-tag { font-size: 9px; letter-spacing: 0.22em; padding: 3px 9px; margin-bottom: 12px; }
+    .lyric-line { font-size: 16px; line-height: 1.6; }
+    .lyric-line.note { font-size: 13px; }
+    .lyric-section.chorus .lyric-line { font-size: 22px; line-height: 1.3; }
+    .lyric-section.outro .lyric-line { font-size: 18px; }
+    .lyrics-side { gap: 6px; }
+    .lyrics-side a { font-size: 10px; padding: 5px 8px; letter-spacing: 0.18em; }
+
+    /* footer */
+    footer { padding: 26px 16px; font-size: 9px; letter-spacing: 0.18em; }
+  }
+
+  /* Very small phones */
+  @media (max-width: 380px) {
+    .hero-title { font-size: clamp(46px, 17vw, 70px); }
+    .player-side { flex-direction: column; }
+    .download-btn { width: 100%; }
+    .play-btn { width: 52px; height: 52px; }
+    .play-btn svg { width: 20px; height: 20px; }
+    .kline.k-cur { font-size: 24px !important; }
+    .kstage-eq .b:nth-child(n+13) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="scanline"></div>
+
+<header class="topbar" id="topbar">
+  <div class="brand"><span class="dot"></span>ZEVA / YMMA</div>
+  <nav class="nav">
+    <a href="#listen">Listen</a>
+    <a href="#karaoke">Karaoke</a>
+    <a href="#lyrics">Lyrics</a>
+    <a href="#download">Download</a>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div>
+    <div class="hero-meta">
+      <span class="tag">● OFFICIAL ANTHEM</span>
+      <span>2026 / ID</span>
+      <span>YMMA × ZEVA</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="line1">SATU VISI</span>
+      <span class="line2">ZEVA</span>
+    </h1>
+    <p class="hero-sub">
+      Produksi tanpa cela. Variasi nol. Standar baru di tangan kita.
+      Anthem resmi yang menyatukan langkah, mengukir sejarah, dan membawa kita ke puncak dunia.
+    </p>
+    <div class="hero-actions">
+      <a href="#listen" class="btn primary">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Play Anthem
+      </a>
+      <a href="#download" class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+        Download
+      </a>
+    </div>
+  </div>
+
+  <div class="cover-wrap">
+    <div class="cover cover-frame"><i></i>
+      <div class="cover-corner tl">REC.001<br>YMMA-ANTHEM</div>
+      <div class="cover-corner tr">// SIDE A<br>FULL.MIX</div>
+      <div class="cover-zeva">ZEVA</div>
+      <div class="cover-sub">— SATU VISI —</div>
+      <div class="cover-corner bl">SR / 44.1kHz<br>STEREO</div>
+      <div class="cover-corner br">▲ PLAY ▲</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PLAYER ===== -->
+<section class="player-section" id="listen">
+  <div class="section-head">
+    <h2 class="section-title"><span class="num">01 /</span>LISTEN</h2>
+    <span class="section-sub">Streaming · High Quality</span>
+  </div>
+
+  <div class="player">
+    <div class="tabs">
+      <button class="tab active" data-track="full">Full Version</button>
+      <button class="tab" data-track="inst">Karaoke / Instrumental</button>
+    </div>
+
+    <div class="player-main">
+      <button class="play-btn" id="playBtn" aria-label="Play / Pause">
+        <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+
+      <div class="track-info">
+        <div class="track-title-label" id="trackLabel">▶ NOW PLAYING — FULL</div>
+        <div class="track-title-main">Satu Visi ZEVA</div>
+        <div class="progress" id="progress">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="times">
+          <span id="currentTime">0:00</span>
+          <span id="duration">0:00</span>
+        </div>
+        <div class="viz" id="viz">
+          <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+          <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+          <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+          <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+          <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+          <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+          <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+          <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+        </div>
+      </div>
+
+      <div class="player-side" id="download">
+        <a class="download-btn" href="Satu Visi ZEVA (Full).mp3" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+          Full · MP3
+        </a>
+        <a class="download-btn" href="Satu Visi ZEVA(Instrumental).mp3" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+          Karaoke · MP3
+        </a>
+      </div>
+    </div>
+
+    <audio id="audio" preload="metadata"></audio>
+  </div>
+</section>
+
+<!-- ===== KARAOKE ===== -->
+<section class="karaoke-section" id="karaoke">
+  <div class="section-head">
+    <h2 class="section-title"><span class="num">02 /</span>KARAOKE</h2>
+    <span class="section-sub">Live Captions · Sing Along</span>
+  </div>
+
+  <div class="kstage" id="kstage">
+    <button class="kfs-btn" id="kfsBtn" title="フルスクリーン">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+
+    <div class="kstage-meta">
+      <span><span class="rec-dot"></span>LIVE</span>
+      <span>SATU VISI · <span class="lit">ZEVA</span></span>
+      <span>LINE <span class="lit" id="kCounter">0</span> / <span id="kCounterTotal">0</span></span>
+    </div>
+
+    <div class="kstage-body idle" id="kbody">
+      <div class="kline k-p2" id="kP2">—</div>
+      <div class="kline k-p1" id="kP1">—</div>
+      <div class="kline k-cur" id="kCur">▶ 再生してください</div>
+      <div class="kline k-n1" id="kN1">—</div>
+      <div class="kline k-n2" id="kN2">—</div>
+    </div>
+
+    <div class="kstage-eq">
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+      <div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LYRICS ===== -->
+<section class="lyrics-section" id="lyrics">
+  <div class="section-head">
+    <h2 class="section-title"><span class="num">03 /</span>LYRICS</h2>
+    <span class="section-sub">Bahasa Indonesia</span>
+  </div>
+
+  <div class="lyrics-wrap">
+    <aside class="lyrics-side">
+      <a href="#l-v1" class="active">Verse 1</a>
+      <a href="#l-pc">Pre-Chorus</a>
+      <a href="#l-ch">Chorus</a>
+      <a href="#l-v2">Verse 2</a>
+      <a href="#l-bd">Breakdown</a>
+      <a href="#l-bu">Build Up</a>
+      <a href="#l-out">Outro</a>
+    </aside>
+
+    <div class="lyrics">
+
+      <div class="lyric-section" id="l-v1">
+        <span class="lyric-tag">Verse 1</span>
+        <div class="lyric-line">Di YMMA kita bersatu, rakit masa depan baru</div>
+        <div class="lyric-line">Hapus variasi, buang rutinitas yang kaku</div>
+      </div>
+
+      <div class="lyric-section" id="l-pc">
+        <span class="lyric-tag">Pre-Chorus</span>
+        <div class="lyric-line">Langkah pasti, inovasi jadi nyata</div>
+        <div class="lyric-line">Ubah YMMA, satukan visi kita</div>
+      </div>
+
+      <div class="lyric-section chorus" id="l-ch">
+        <span class="lyric-tag">Chorus</span>
+        <div class="lyric-line">ZEVA!</div>
+        <div class="lyric-line">Produksi tanpa cela, ukir sejarah</div>
+        <div class="lyric-line">Variasi nol, YMMA maju jaya selamanya!</div>
+        <div class="lyric-line">ZEVA!</div>
+        <div class="lyric-line">Standar baru di tangan kita</div>
+        <div class="lyric-line">Bawa kita ke puncak dunia !</div>
+      </div>
+
+      <div class="lyric-section" id="l-v2">
+        <span class="lyric-tag">Verse 2</span>
+        <div class="lyric-line">Data mengalir, sistem memandu pasti</div>
+        <div class="lyric-line">Presisi mutlak, bangga di dalam hati</div>
+      </div>
+
+      <div class="lyric-section">
+        <span class="lyric-tag">Pre-Chorus</span>
+        <div class="lyric-line">Langkah pasti, inovasi jadi nyata</div>
+        <div class="lyric-line">Ubah YMMA, satukan visi kita</div>
+      </div>
+
+      <div class="lyric-section chorus">
+        <span class="lyric-tag">Chorus</span>
+        <div class="lyric-line">ZEVA!</div>
+        <div class="lyric-line">Produksi tanpa cela, ukir sejarah</div>
+        <div class="lyric-line">Variasi nol, YMMA maju jaya selamanya!</div>
+        <div class="lyric-line">ZEVA!</div>
+        <div class="lyric-line">Standar baru di tangan kita</div>
+        <div class="lyric-line">Bawa kita ke puncak dunia !</div>
+      </div>
+
+      <div class="lyric-section" id="l-bd">
+        <span class="lyric-tag">Guitar Solo · Breakdown</span>
+        <div class="lyric-line note">(インストゥルメンタル)</div>
+        <div class="lyric-line">Mengontrol variasi dengan tepat</div>
+        <div class="lyric-line">Terlahir kembali, menjadi kuat</div>
+      </div>
+
+      <div class="lyric-section" id="l-bu">
+        <span class="lyric-tag">Drum Build Up</span>
+        <div class="lyric-line">Transformasi ini milik kita semua</div>
+        <div class="lyric-line">Dengan satu tekad bersama majukan YMMA</div>
+      </div>
+
+      <div class="lyric-section chorus">
+        <span class="lyric-tag">Final Chorus</span>
+        <div class="lyric-line">ZEVA!</div>
+        <div class="lyric-line">Produksi tanpa cela, ukir sejarah</div>
+        <div class="lyric-line">Variasi nol, YMMA maju jaya selamanya!</div>
+        <div class="lyric-line">ZEVA! Standar baru di tangan kita</div>
+        <div class="lyric-line">Bawa kita ke puncak dunia!</div>
+      </div>
+
+      <div class="lyric-section outro" id="l-out">
+        <span class="lyric-tag">Outro</span>
+        <div class="lyric-line">Satu visi, ZEVA...</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 <span class="accent">YMMA × ZEVA</span> · All Rights Reserved</div>
+  <div>SATU VISI · ONE PRECISION · ZERO VARIATION</div>
+</footer>
+
+<script>
+  const audio = document.getElementById('audio');
+  const playBtn = document.getElementById('playBtn');
+  const playIcon = document.getElementById('playIcon');
+  const progress = document.getElementById('progress');
+  const progressFill = document.getElementById('progressFill');
+  const currentTimeEl = document.getElementById('currentTime');
+  const durationEl = document.getElementById('duration');
+  const viz = document.getElementById('viz');
+  const trackLabel = document.getElementById('trackLabel');
+  const tabs = document.querySelectorAll('.tab');
+
+  const tracks = {
+    full: { src: 'Satu Visi ZEVA (Full).mp3', label: '▶ NOW PLAYING — FULL' },
+    inst: { src: 'Satu Visi ZEVA(Instrumental).mp3', label: '▶ NOW PLAYING — KARAOKE' }
+  };
+
+  let currentTrack = 'full';
+  audio.src = tracks.full.src;
+
+  const playSvg = '<path d="M8 5v14l11-7z"/>';
+  const pauseSvg = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+
+  function setPlaying(playing) {
+    playIcon.innerHTML = playing ? pauseSvg : playSvg;
+    viz.classList.toggle('playing', playing);
+  }
+
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) audio.play(); else audio.pause();
+  });
+
+  audio.addEventListener('play', () => setPlaying(true));
+  audio.addEventListener('pause', () => setPlaying(false));
+  audio.addEventListener('ended', () => setPlaying(false));
+
+  function fmt(t) {
+    if (isNaN(t)) return '0:00';
+    const m = Math.floor(t / 60);
+    const s = Math.floor(t % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  }
+
+  audio.addEventListener('loadedmetadata', () => {
+    durationEl.textContent = fmt(audio.duration);
+  });
+  audio.addEventListener('timeupdate', () => {
+    const pct = (audio.currentTime / audio.duration) * 100 || 0;
+    progressFill.style.width = pct + '%';
+    currentTimeEl.textContent = fmt(audio.currentTime);
+  });
+
+  progress.addEventListener('click', (e) => {
+    const rect = progress.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    if (!isNaN(audio.duration)) audio.currentTime = pct * audio.duration;
+  });
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const t = tab.dataset.track;
+      if (t === currentTrack) return;
+      tabs.forEach(x => x.classList.remove('active'));
+      tab.classList.add('active');
+      currentTrack = t;
+      const wasPlaying = !audio.paused;
+      audio.src = tracks[t].src;
+      trackLabel.textContent = tracks[t].label;
+      progressFill.style.width = '0%';
+      currentTimeEl.textContent = '0:00';
+      if (wasPlaying) audio.play();
+    });
+  });
+
+  // Topbar scroll style
+  const topbar = document.getElementById('topbar');
+  window.addEventListener('scroll', () => {
+    topbar.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  // ========== KARAOKE ENGINE (word-level) ==========
+  // Each line:
+  //   - lyric line: { time, text, words: [[t, word], ...] }
+  //   - solo:       { time, text, kind: 'solo' }
+  // `time` = line display start (already offset 0.2s before first word)
+  const klines = [
+    { time: 19.93, text: 'Di YMMA kita bersatu, rakit masa depan baru',
+      words: [[20.13,'Di'],[21.20,'YMMA'],[22.04,'kita'],[22.64,'bersatu,'],[23.53,'rakit'],[24.04,'masa'],[24.45,'depan'],[24.87,'baru']] },
+    { time: 25.94, text: 'Hapus variasi, buang rutinitas yang kaku',
+      words: [[26.14,'Hapus'],[27.21,'variasi,'],[29.11,'buang'],[29.72,'rutinitas'],[31.25,'yang'],[31.81,'kaku']] },
+    { time: 33.29, text: 'Langkah pasti, inovasi jadi nyata',
+      words: [[33.49,'Langkah'],[34.37,'pasti,'],[36.20,'inovasi'],[37.88,'jadi'],[38.35,'nyata']] },
+    { time: 39.93, text: 'Ubah YMMA, satukan visi kita',
+      words: [[40.13,'Ubah'],[40.88,'YMMA,'],[42.94,'satukan'],[44.09,'visi'],[44.65,'kita']] },
+    { time: 47.91, text: 'ZEVA!', words: [[48.11,'ZEVA!']] },
+    { time: 49.30, text: 'Produksi tanpa cela, ukir sejarah',
+      words: [[49.50,'Produksi'],[50.72,'tanpa'],[51.19,'cela,'],[52.92,'ukir'],[53.63,'sejarah']] },
+    { time: 54.68, text: 'Variasi nol, YMMA maju jaya selamanya!',
+      words: [[54.88,'Variasi'],[55.77,'nol,'],[56.56,'YMMA'],[58.06,'maju'],[58.57,'jaya'],[58.98,'selamanya!']] },
+    { time: 61.07, text: 'ZEVA!', words: [[61.27,'ZEVA!']] },
+    { time: 62.71, text: 'Standar baru di tangan kita',
+      words: [[62.91,'Standar'],[63.70,'baru'],[64.26,'di'],[64.73,'tangan'],[65.95,'kita']] },
+    { time: 67.33, text: 'Bawa kita ke puncak dunia!',
+      words: [[67.53,'Bawa'],[69.36,'kita'],[70.34,'ke'],[70.86,'puncak'],[71.37,'dunia!']] },
+    { time: 77.84, text: 'Data mengalir, sistem memandu pasti',
+      words: [[78.04,'Data'],[78.97,'mengalir,'],[80.01,'sistem'],[80.47,'memandu'],[81.36,'pasti']] },
+    { time: 84.76, text: 'Presisi mutlak, bangga di dalam hati',
+      words: [[84.96,'Presisi'],[85.75,'mutlak,'],[86.41,'bangga'],[86.97,'di'],[87.54,'dalam'],[88.00,'hati']] },
+    { time: 91.12, text: 'Langkah pasti, inovasi jadi nyata',
+      words: [[91.32,'Langkah'],[92.48,'pasti,'],[94.40,'inovasi'],[95.98,'jadi'],[96.35,'nyata']] },
+    { time: 97.83, text: 'Ubah YMMA, satukan visi kita',
+      words: [[98.03,'Ubah'],[98.78,'YMMA,'],[100.88,'satukan'],[102.00,'visi'],[102.51,'kita']] },
+    { time: 105.97, text: 'ZEVA!', words: [[106.17,'ZEVA!']] },
+    { time: 107.28, text: 'Produksi tanpa cela, ukir sejarah',
+      words: [[107.48,'Produksi'],[108.59,'tanpa'],[109.05,'cela,'],[111.05,'ukir'],[111.85,'sejarah']] },
+    { time: 112.58, text: 'Variasi nol, YMMA maju jaya selamanya!',
+      words: [[112.78,'Variasi'],[113.90,'nol,'],[114.73,'YMMA'],[116.08,'maju'],[116.54,'jaya'],[117.06,'selamanya!']] },
+    { time: 118.91, text: 'ZEVA!', words: [[119.11,'ZEVA!']] },
+    { time: 120.57, text: 'Standar baru di tangan kita',
+      words: [[120.77,'Standar'],[121.66,'baru'],[122.31,'di'],[122.73,'tangan'],[124.03,'kita']] },
+    { time: 125.34, text: 'Bawa kita ke puncak dunia!',
+      words: [[125.54,'Bawa'],[127.74,'kita'],[128.35,'ke'],[128.86,'puncak'],[129.32,'dunia!']] },
+    { time: 131.61, text: '[ Guitar Solo ]', kind: 'solo' },
+    { time: 168.57, text: 'Mengontrol variasi dengan tepat',
+      words: [[168.77,'Mengontrol'],[170.13,'variasi'],[171.67,'dengan'],[172.23,'tepat']] },
+    { time: 175.11, text: 'Terlahir kembali, menjadi kuat',
+      words: [[175.31,'Terlahir'],[176.81,'kembali,'],[178.35,'menjadi'],[180.59,'kuat']] },
+    { time: 181.56, text: 'Transformasi ini milik kita semua',
+      words: [[181.76,'Transformasi'],[183.64,'ini'],[184.25,'milik'],[185.09,'kita'],[186.11,'semua']] },
+    { time: 188.62, text: 'Dengan satu tekad bersama majukan YMMA',
+      words: [[188.82,'Dengan'],[189.43,'satu'],[189.85,'tekad'],[192.17,'bersama'],[193.43,'majukan'],[194.46,'YMMA']] },
+    { time: 208.08, text: 'ZEVA!', words: [[208.28,'ZEVA!']] },
+    { time: 209.89, text: 'Produksi tanpa cela, ukir sejarah',
+      words: [[210.09,'Produksi'],[211.02,'tanpa'],[211.87,'cela,'],[213.55,'ukir'],[214.11,'sejarah']] },
+    { time: 215.13, text: 'Variasi nol, YMMA maju jaya selamanya!',
+      words: [[215.33,'Variasi'],[216.40,'nol,'],[217.20,'YMMA'],[218.69,'maju'],[219.16,'jaya'],[219.53,'selamanya!']] },
+    { time: 221.72, text: 'ZEVA! Standar baru di tangan kita',
+      words: [[221.92,'ZEVA!'],[223.36,'Standar'],[224.07,'baru'],[224.58,'di'],[225.09,'tangan'],[226.39,'kita']] },
+    { time: 227.83, text: 'Bawa kita ke puncak dunia!',
+      words: [[228.03,'Bawa'],[229.99,'kita'],[230.93,'ke'],[231.26,'puncak'],[231.87,'dunia!']] },
+    { time: 234.15, text: 'Satu visi, ZEVA...',
+      words: [[234.35,'Satu'],[236.08,'visi,'],[238.93,'ZEVA...']] },
+  ];
+
+  const kP2 = document.getElementById('kP2');
+  const kP1 = document.getElementById('kP1');
+  const kCur = document.getElementById('kCur');
+  const kN1 = document.getElementById('kN1');
+  const kN2 = document.getElementById('kN2');
+  const kbody = document.getElementById('kbody');
+  const kstage = document.getElementById('kstage');
+  const kCounter = document.getElementById('kCounter');
+  const kCounterTotal = document.getElementById('kCounterTotal');
+
+  kCounterTotal.textContent = klines.length;
+
+  function setSideLine(el, idx) {
+    if (idx < 0 || idx >= klines.length) {
+      el.textContent = '—';
+      el.classList.remove('is-tag');
+      return;
+    }
+    const ln = klines[idx];
+    el.textContent = ln.text;
+    el.classList.toggle('is-tag', ln.kind === 'solo');
+  }
+
+  // Tracks current line render state
+  let curLineIdx = -2;
+  let wordSpans = []; // [{ el, t, nextT, state }]
+
+  function rebuildCurrentLine(idx) {
+    curLineIdx = idx;
+    kCur.classList.remove('is-tag');
+    kCur.innerHTML = '';
+    wordSpans = [];
+
+    if (idx < 0 || idx >= klines.length) {
+      kCur.textContent = '▶ 再生してください';
+      kbody.classList.add('idle');
+      kbody.classList.remove('solo');
+      return;
+    }
+    kbody.classList.remove('idle');
+
+    const ln = klines[idx];
+
+    if (ln.kind === 'solo') {
+      kCur.classList.add('is-tag');
+      kbody.classList.add('solo');
+      const span = document.createElement('span');
+      span.className = 'kw';
+      span.textContent = ln.text;
+      kCur.appendChild(span);
+      const nextT = (idx + 1 < klines.length) ? klines[idx + 1].time : ln.time + 30;
+      wordSpans.push({ el: span, t: ln.time, nextT, state: null });
+      return;
+    }
+
+    kbody.classList.remove('solo');
+    ln.words.forEach(([wt, w], i) => {
+      const span = document.createElement('span');
+      span.className = 'kw';
+      span.textContent = w;
+      kCur.appendChild(span);
+      let nextT;
+      if (i + 1 < ln.words.length) nextT = ln.words[i + 1][0];
+      else if (idx + 1 < klines.length) nextT = klines[idx + 1].time;
+      else nextT = wt + 2;
+      wordSpans.push({ el: span, t: wt, nextT, state: null });
+    });
+  }
+
+  function updateWordStates(t) {
+    for (const ws of wordSpans) {
+      let state;
+      if (t < ws.t) state = 'pending';
+      else if (t < ws.nextT) state = 'singing';
+      else state = 'sung';
+      if (ws.state !== state) {
+        ws.state = state;
+        ws.el.classList.remove('singing', 'sung');
+        if (state === 'singing') ws.el.classList.add('singing');
+        else if (state === 'sung') ws.el.classList.add('sung');
+      }
+    }
+  }
+
+  // Line advances 0.1s after the first word (data is -0.2; -0.3 offset = -0.1 total lead)
+  const LINE_LEAD = -0.3;
+  function getKIdx(t) {
+    const lookupT = t + LINE_LEAD;
+    let idx = -1;
+    for (let i = 0; i < klines.length; i++) {
+      if (klines[i].time <= lookupT) idx = i; else break;
+    }
+    return idx;
+  }
+
+  function kTick() {
+    const t = audio.currentTime;
+    kbody.classList.toggle('live', !audio.paused);
+
+    const idx = getKIdx(t);
+    if (idx !== curLineIdx) {
+      setSideLine(kP2, idx - 2);
+      setSideLine(kP1, idx - 1);
+      rebuildCurrentLine(idx);
+      setSideLine(kN1, idx + 1);
+      setSideLine(kN2, idx + 2);
+      kCounter.textContent = Math.max(0, idx + 1);
+    }
+    updateWordStates(t);
+
+    requestAnimationFrame(kTick);
+  }
+  requestAnimationFrame(kTick);
+
+  // Fullscreen toggle
+  document.getElementById('kfsBtn').addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      if (kstage.requestFullscreen) kstage.requestFullscreen();
+      else kstage.classList.add('is-fs');
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else kstage.classList.remove('is-fs');
+    }
+  });
+
+  // Side nav active state
+  const sideLinks = document.querySelectorAll('.lyrics-side a');
+  const sections = Array.from(sideLinks).map(a => document.querySelector(a.getAttribute('href')));
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY + 200;
+    let idx = 0;
+    sections.forEach((s, i) => { if (s && s.offsetTop <= y) idx = i; });
+    sideLinks.forEach((a, i) => a.classList.toggle('active', i === idx));
+  });
+</script>
+
+</body>
+</html>
