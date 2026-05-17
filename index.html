@@ -958,7 +958,7 @@
       </div>
 
       <div class="player-side" id="download">
-        <a class="download-btn" href="Satu Visi ZEVA (Full).mp3" download>
+        <a class="download-btn" href="Satu Visi ZEVA (Remastered Full ver2).mp3" download>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
           Full · MP3
         </a>
@@ -1086,7 +1086,7 @@
   const tabs = document.querySelectorAll('.tab');
 
   const tracks = {
-    full: { src: 'Satu Visi ZEVA (Full).mp3', label: '▶ NOW PLAYING — FULL' },
+    full: { src: 'Satu Visi ZEVA (Remastered Full ver2).mp3', label: '▶ NOW PLAYING — FULL' },
     inst: { src: 'Satu Visi ZEVA(Instrumental).mp3', label: '▶ NOW PLAYING — KARAOKE' }
   };
 
@@ -1159,62 +1159,62 @@
   //   - solo:       { time, text, kind: 'solo' }
   // `time` = line display start (already offset 0.2s before first word)
   const klines = [
-    { time: 19.93, text: 'Di YMMA kita bersatu, rakit masa depan baru',
-      words: [[20.13,'Di'],[21.20,'YMMA'],[22.04,'kita'],[22.64,'bersatu,'],[23.53,'rakit'],[24.04,'masa'],[24.45,'depan'],[24.87,'baru']] },
-    { time: 25.94, text: 'Hapus variasi, buang rutinitas yang kaku',
-      words: [[26.14,'Hapus'],[27.21,'variasi,'],[29.11,'buang'],[29.72,'rutinitas'],[31.25,'yang'],[31.81,'kaku']] },
-    { time: 33.29, text: 'Langkah pasti, inovasi jadi nyata',
-      words: [[33.49,'Langkah'],[34.37,'pasti,'],[36.20,'inovasi'],[37.88,'jadi'],[38.35,'nyata']] },
-    { time: 39.93, text: 'Ubah YMMA, satukan visi kita',
-      words: [[40.13,'Ubah'],[40.88,'YMMA,'],[42.94,'satukan'],[44.09,'visi'],[44.65,'kita']] },
-    { time: 47.91, text: 'ZEVA!', words: [[48.11,'ZEVA!']] },
-    { time: 49.30, text: 'Produksi tanpa cela, ukir sejarah',
-      words: [[49.50,'Produksi'],[50.72,'tanpa'],[51.19,'cela,'],[52.92,'ukir'],[53.63,'sejarah']] },
-    { time: 54.68, text: 'Variasi nol, YMMA maju jaya selamanya!',
-      words: [[54.88,'Variasi'],[55.77,'nol,'],[56.56,'YMMA'],[58.06,'maju'],[58.57,'jaya'],[58.98,'selamanya!']] },
-    { time: 61.07, text: 'ZEVA!', words: [[61.27,'ZEVA!']] },
-    { time: 62.71, text: 'Standar baru di tangan kita',
-      words: [[62.91,'Standar'],[63.70,'baru'],[64.26,'di'],[64.73,'tangan'],[65.95,'kita']] },
-    { time: 67.33, text: 'Bawa kita ke puncak dunia!',
-      words: [[67.53,'Bawa'],[69.36,'kita'],[70.34,'ke'],[70.86,'puncak'],[71.37,'dunia!']] },
-    { time: 77.84, text: 'Data mengalir, sistem memandu pasti',
-      words: [[78.04,'Data'],[78.97,'mengalir,'],[80.01,'sistem'],[80.47,'memandu'],[81.36,'pasti']] },
-    { time: 84.76, text: 'Presisi mutlak, bangga di dalam hati',
-      words: [[84.96,'Presisi'],[85.75,'mutlak,'],[86.41,'bangga'],[86.97,'di'],[87.54,'dalam'],[88.00,'hati']] },
-    { time: 91.12, text: 'Langkah pasti, inovasi jadi nyata',
-      words: [[91.32,'Langkah'],[92.48,'pasti,'],[94.40,'inovasi'],[95.98,'jadi'],[96.35,'nyata']] },
-    { time: 97.83, text: 'Ubah YMMA, satukan visi kita',
-      words: [[98.03,'Ubah'],[98.78,'YMMA,'],[100.88,'satukan'],[102.00,'visi'],[102.51,'kita']] },
-    { time: 105.97, text: 'ZEVA!', words: [[106.17,'ZEVA!']] },
-    { time: 107.28, text: 'Produksi tanpa cela, ukir sejarah',
-      words: [[107.48,'Produksi'],[108.59,'tanpa'],[109.05,'cela,'],[111.05,'ukir'],[111.85,'sejarah']] },
-    { time: 112.58, text: 'Variasi nol, YMMA maju jaya selamanya!',
-      words: [[112.78,'Variasi'],[113.90,'nol,'],[114.73,'YMMA'],[116.08,'maju'],[116.54,'jaya'],[117.06,'selamanya!']] },
-    { time: 118.91, text: 'ZEVA!', words: [[119.11,'ZEVA!']] },
-    { time: 120.57, text: 'Standar baru di tangan kita',
-      words: [[120.77,'Standar'],[121.66,'baru'],[122.31,'di'],[122.73,'tangan'],[124.03,'kita']] },
-    { time: 125.34, text: 'Bawa kita ke puncak dunia!',
-      words: [[125.54,'Bawa'],[127.74,'kita'],[128.35,'ke'],[128.86,'puncak'],[129.32,'dunia!']] },
-    { time: 131.61, text: '[ Guitar Solo ]', kind: 'solo' },
-    { time: 168.57, text: 'Mengontrol variasi dengan tepat',
-      words: [[168.77,'Mengontrol'],[170.13,'variasi'],[171.67,'dengan'],[172.23,'tepat']] },
-    { time: 175.11, text: 'Terlahir kembali, menjadi kuat',
-      words: [[175.31,'Terlahir'],[176.81,'kembali,'],[178.35,'menjadi'],[180.59,'kuat']] },
-    { time: 181.56, text: 'Transformasi ini milik kita semua',
-      words: [[181.76,'Transformasi'],[183.64,'ini'],[184.25,'milik'],[185.09,'kita'],[186.11,'semua']] },
-    { time: 188.62, text: 'Dengan satu tekad bersama majukan YMMA',
-      words: [[188.82,'Dengan'],[189.43,'satu'],[189.85,'tekad'],[192.17,'bersama'],[193.43,'majukan'],[194.46,'YMMA']] },
-    { time: 208.08, text: 'ZEVA!', words: [[208.28,'ZEVA!']] },
-    { time: 209.89, text: 'Produksi tanpa cela, ukir sejarah',
-      words: [[210.09,'Produksi'],[211.02,'tanpa'],[211.87,'cela,'],[213.55,'ukir'],[214.11,'sejarah']] },
-    { time: 215.13, text: 'Variasi nol, YMMA maju jaya selamanya!',
-      words: [[215.33,'Variasi'],[216.40,'nol,'],[217.20,'YMMA'],[218.69,'maju'],[219.16,'jaya'],[219.53,'selamanya!']] },
-    { time: 221.72, text: 'ZEVA! Standar baru di tangan kita',
-      words: [[221.92,'ZEVA!'],[223.36,'Standar'],[224.07,'baru'],[224.58,'di'],[225.09,'tangan'],[226.39,'kita']] },
-    { time: 227.83, text: 'Bawa kita ke puncak dunia!',
-      words: [[228.03,'Bawa'],[229.99,'kita'],[230.93,'ke'],[231.26,'puncak'],[231.87,'dunia!']] },
-    { time: 234.15, text: 'Satu visi, ZEVA...',
-      words: [[234.35,'Satu'],[236.08,'visi,'],[238.93,'ZEVA...']] },
+    { time: 19.85, text: 'Di YMMA kita bersatu, rakit masa depan baru',
+      words: [[20.05,'Di'],[20.30,'YMMA'],[22.03,'kita'],[22.65,'bersatu,'],[23.55,'rakit'],[24.04,'masa'],[24.53,'depan'],[24.90,'baru']] },
+    { time: 26.06, text: 'Hapus variasi, buang rutinitas yang kaku',
+      words: [[26.26,'Hapus'],[27.34,'variasi,'],[29.32,'buang'],[29.81,'rutinitas'],[31.30,'yang'],[31.84,'kaku']] },
+    { time: 33.32, text: 'Langkah pasti, inovasi jadi nyata',
+      words: [[33.52,'Langkah'],[34.67,'pasti,'],[36.28,'inovasi'],[37.89,'jadi'],[38.42,'nyata']] },
+    { time: 39.82, text: 'Ubah YMMA, satukan visi kita',
+      words: [[40.02,'Ubah'],[40.68,'YMMA,'],[42.98,'satukan'],[44.12,'visi'],[44.74,'kita']] },
+    { time: 47.99, text: 'ZEVA!', words: [[48.19,'ZEVA!']] },
+    { time: 49.55, text: 'Produksi tanpa cela, ukir sejarah',
+      words: [[49.75,'Produksi'],[50.69,'tanpa'],[51.26,'cela,'],[52.99,'ukir'],[53.86,'sejarah']] },
+    { time: 54.70, text: 'Variasi nol, YMMA maju jaya selamanya!',
+      words: [[54.90,'Variasi'],[55.93,'nol,'],[56.71,'YMMA'],[58.23,'maju'],[58.64,'jaya'],[59.02,'selamanya!']] },
+    { time: 61.28, text: 'ZEVA!', words: [[61.48,'ZEVA!']] },
+    { time: 62.89, text: 'Standar baru di tangan kita',
+      words: [[63.09,'Standar'],[63.83,'baru'],[64.36,'di'],[64.74,'tangan'],[66.05,'kita']] },
+    { time: 67.58, text: 'Bawa kita ke puncak dunia!',
+      words: [[67.78,'Bawa'],[69.80,'kita'],[70.50,'ke'],[70.91,'puncak'],[71.49,'dunia!']] },
+    { time: 78.30, text: 'Data mengalir, sistem memandu pasti',
+      words: [[78.50,'Data'],[79.07,'mengalir,'],[80.06,'sistem'],[80.68,'memandu'],[81.21,'pasti']] },
+    { time: 84.89, text: 'Presisi mutlak, bangga di dalam hati',
+      words: [[85.09,'Presisi'],[86.03,'mutlak,'],[86.61,'bangga'],[87.27,'di'],[87.64,'dalam'],[88.13,'hati']] },
+    { time: 91.55, text: 'Langkah pasti, inovasi jadi nyata',
+      words: [[91.75,'Langkah'],[92.91,'pasti,'],[94.60,'inovasi'],[96.08,'jadi'],[96.66,'nyata']] },
+    { time: 98.06, text: 'Ubah YMMA, satukan visi kita',
+      words: [[98.26,'Ubah'],[98.96,'YMMA,'],[101.18,'satukan'],[102.25,'visi'],[102.82,'kita']] },
+    { time: 106.13, text: 'ZEVA!', words: [[106.33,'ZEVA!']] },
+    { time: 107.75, text: 'Produksi tanpa cela, ukir sejarah',
+      words: [[107.95,'Produksi'],[108.89,'tanpa'],[109.46,'cela,'],[111.15,'ukir'],[112.01,'sejarah']] },
+    { time: 112.81, text: 'Variasi nol, YMMA maju jaya selamanya!',
+      words: [[113.01,'Variasi'],[113.99,'nol,'],[114.90,'YMMA'],[116.33,'maju'],[116.75,'jaya'],[117.20,'selamanya!']] },
+    { time: 119.38, text: 'ZEVA!', words: [[119.58,'ZEVA!']] },
+    { time: 120.98, text: 'Standar baru di tangan kita',
+      words: [[121.18,'Standar'],[122.05,'baru'],[122.41,'di'],[122.79,'tangan'],[124.14,'kita']] },
+    { time: 125.63, text: 'Bawa kita ke puncak dunia!',
+      words: [[125.83,'Bawa'],[127.89,'kita'],[128.46,'ke'],[129.04,'puncak'],[129.41,'dunia!']] },
+    { time: 131.63, text: '[ Guitar Solo ]', kind: 'solo' },
+    { time: 168.75, text: 'Mengontrol variasi dengan tepat',
+      words: [[168.95,'Mengontrol'],[170.35,'variasi'],[171.84,'dengan'],[172.45,'tepat']] },
+    { time: 175.29, text: 'Terlahir kembali, menjadi kuat',
+      words: [[175.49,'Terlahir'],[176.98,'kembali,'],[178.66,'menjadi'],[180.84,'kuat']] },
+    { time: 182.07, text: 'Transformasi ini milik kita semua',
+      words: [[182.27,'Transformasi'],[184.00,'ini'],[184.62,'milik'],[185.44,'kita'],[186.30,'semua']] },
+    { time: 188.91, text: 'Dengan satu tekad bersama majukan YMMA',
+      words: [[189.11,'Dengan'],[189.68,'satu'],[190.17,'tekad'],[192.65,'bersama'],[193.93,'majukan'],[195.82,'YMMA']] },
+    { time: 208.84, text: 'ZEVA!', words: [[209.04,'ZEVA!']] },
+    { time: 210.45, text: 'Produksi tanpa cela, ukir sejarah',
+      words: [[210.65,'Produksi'],[211.59,'tanpa'],[212.20,'cela,'],[213.85,'ukir'],[214.55,'sejarah']] },
+    { time: 215.54, text: 'Variasi nol, YMMA maju jaya selamanya!',
+      words: [[215.74,'Variasi'],[216.73,'nol,'],[217.51,'YMMA'],[219.00,'maju'],[219.41,'jaya'],[219.78,'selamanya!']] },
+    { time: 222.04, text: 'ZEVA! Standar baru di tangan kita',
+      words: [[222.24,'ZEVA!'],[223.80,'Standar'],[224.50,'baru'],[224.95,'di'],[225.61,'tangan'],[226.68,'kita']] },
+    { time: 228.17, text: 'Bawa kita ke puncak dunia!',
+      words: [[228.37,'Bawa'],[230.22,'kita'],[231.20,'ke'],[231.65,'puncak'],[232.11,'dunia!']] },
+    { time: 234.63, text: 'Satu visi, ZEVA...',
+      words: [[234.83,'Satu'],[236.56,'visi,'],[239.86,'ZEVA...']] },
   ];
 
   const kP2 = document.getElementById('kP2');
@@ -1260,31 +1260,41 @@
     }
     kbody.classList.remove('idle');
 
+    // Set initial classes based on current audio time so freshly-built spans
+    // already start in the right state. Without this, after a seek every word
+    // would transition from default to sung/singing over 0.35s, making the
+    // lyrics look "late" relative to playing through from the start.
+    const t = audio.currentTime;
+    const stateFor = (wt, nextT) => (t < wt) ? null : (t < nextT ? 'singing' : 'sung');
+    const classFor = (state) => 'kw' + (state === 'singing' ? ' singing' : state === 'sung' ? ' sung' : '');
+
     const ln = klines[idx];
 
     if (ln.kind === 'solo') {
       kCur.classList.add('is-tag');
       kbody.classList.add('solo');
+      const nextT = (idx + 1 < klines.length) ? klines[idx + 1].time : ln.time + 30;
+      const state = stateFor(ln.time, nextT);
       const span = document.createElement('span');
-      span.className = 'kw';
+      span.className = classFor(state);
       span.textContent = ln.text;
       kCur.appendChild(span);
-      const nextT = (idx + 1 < klines.length) ? klines[idx + 1].time : ln.time + 30;
-      wordSpans.push({ el: span, t: ln.time, nextT, state: null });
+      wordSpans.push({ el: span, t: ln.time, nextT, state });
       return;
     }
 
     kbody.classList.remove('solo');
     ln.words.forEach(([wt, w], i) => {
-      const span = document.createElement('span');
-      span.className = 'kw';
-      span.textContent = w;
-      kCur.appendChild(span);
       let nextT;
       if (i + 1 < ln.words.length) nextT = ln.words[i + 1][0];
       else if (idx + 1 < klines.length) nextT = klines[idx + 1].time;
       else nextT = wt + 2;
-      wordSpans.push({ el: span, t: wt, nextT, state: null });
+      const state = stateFor(wt, nextT);
+      const span = document.createElement('span');
+      span.className = classFor(state);
+      span.textContent = w;
+      kCur.appendChild(span);
+      wordSpans.push({ el: span, t: wt, nextT, state });
     });
   }
 
@@ -1313,6 +1323,10 @@
     }
     return idx;
   }
+
+  // After a seek completes, force the karaoke to rebuild the line on the next
+  // tick — guards against audio.currentTime drift during in-progress seeks.
+  audio.addEventListener('seeked', () => { curLineIdx = -2; });
 
   function kTick() {
     const t = audio.currentTime;
